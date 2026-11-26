@@ -310,111 +310,62 @@
   color: var(--md-default-fg-color--light);
 }
 
-/* Sidebars recolhíveis ------------------------------------------------- */
-
-.md-nav--secondary {
-  position: relative;
-}
-
-.pms-sidebar-toggle {
-  position: absolute;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.35rem;
-  height: 1.35rem;
-  padding: 0;
-  color: var(--md-default-fg-color--light);
-  cursor: pointer;
-  background: transparent;
-  border: 0;
-  border-radius: 0.3rem;
-  transition: color 120ms ease, background-color 120ms ease;
-}
-
-.pms-sidebar-toggle:hover,
-.pms-sidebar-toggle:focus-visible {
-  color: var(--md-accent-fg-color);
-  background: var(--md-default-fg-color--lightest);
-  outline: none;
-}
-
-.pms-sidebar-toggle svg {
-  width: 0.9rem;
-  height: 0.9rem;
-  fill: none;
-  stroke: currentcolor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 180ms ease;
-}
-
-.pms-toc-toggle {
-  top: 0.15rem;
-  right: 0.1rem;
-}
-
-/* expandido = seta para cima; recolhido = seta para baixo */
-.pms-toc-toggle svg { transform: rotate(180deg); }
-.pms-toc-toggle.is-collapsed svg { transform: rotate(0deg); }
+/* Índice recolhível: usa o controle nativo do tema (#__toc + label). */
 
 @media screen and (min-width: 60em) {
-  .md-nav--secondary > .md-nav__title {
-    padding-right: 1.7rem;
-    cursor: pointer;
-  }
-
-  .md-nav--secondary.pms-toc-collapsed > .md-nav__list {
-    display: none;
-  }
-}
-
-/* Navegação esquerda: vira uma faixa fina, independente do índice. */
-@media screen and (min-width: 76.25em) {
-  .md-sidebar--primary {
+  .md-sidebar--secondary {
     transition: width 200ms ease;
   }
 
-  .md-sidebar--primary > .md-nav--primary > .md-nav__title {
-    padding-right: 1.8rem;
+  .md-sidebar--secondary .md-sidebar-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    padding: 0;
+    color: var(--md-default-fg-color--light);
+    cursor: pointer;
+    background: var(--md-default-bg-color--light);
+    border-radius: 1rem;
+    outline: none;
+    box-shadow: var(--md-shadow-z2);
+    transition: color 125ms ease, background-color 125ms ease;
   }
 
-  .pms-nav-toggle {
-    top: 0.35rem;
-    right: 0.4rem;
+  .md-sidebar--secondary .md-sidebar-button::after {
+    display: block;
+    width: 0.9rem;
+    height: 0.9rem;
+    content: "";
+    background-color: currentcolor;
+    -webkit-mask: var(--md-toc-icon) center / contain no-repeat;
+    mask: var(--md-toc-icon) center / contain no-repeat;
   }
 
-  .md-sidebar--primary.pms-nav-collapsed {
-    width: 3.1rem;
+  .md-sidebar--secondary .md-sidebar-button:hover,
+  .md-sidebar--secondary .md-sidebar-button:focus-visible {
+    color: var(--md-accent-bg-color);
+    background-color: var(--md-accent-fg-color);
   }
 
-  .md-sidebar--primary.pms-nav-collapsed .md-nav--primary > .md-nav__title,
-  .md-sidebar--primary.pms-nav-collapsed .md-nav--primary > .md-nav__list,
-  .md-sidebar--primary.pms-nav-collapsed .md-nav__source {
+  .md-sidebar--secondary .md-sidebar-button__wrapper {
+    padding: 0.35rem 0.45rem 0 0;
+    text-align: right;
+  }
+
+  /* O checkbox nativo recolhe a sidebar inteira; o conteúdo ganha a largura. */
+  .md-sidebar--secondary:has(#__toc:checked) {
+    width: 2.6rem;
+  }
+
+  .md-sidebar--secondary:has(#__toc:checked) .md-sidebar__inner {
     display: none;
   }
 
-  .md-sidebar--primary.pms-nav-collapsed .md-nav--primary {
-    margin-top: 0;
+  .md-sidebar--secondary:has(#__toc:checked) .md-sidebar__scrollwrap {
+    overflow: visible;
   }
-
-  .md-sidebar--primary.pms-nav-collapsed .pms-nav-toggle {
-    right: 0.45rem;
-  }
-}
-
-.pms-nav-toggle svg { transform: rotate(0deg); }
-.pms-nav-toggle.is-collapsed svg { transform: rotate(180deg); }
-
-@media screen and (max-width: 76.24em) {
-  .pms-nav-toggle { display: none; }
-}
-
-@media screen and (max-width: 59.98em) {
-  .pms-toc-toggle { display: none; }
-  .md-nav--secondary > .md-nav__title { padding-right: 0; cursor: default; }
 }
 
 /* Diagramas Mermaid pré-renderizados ---------------------------------- */

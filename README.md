@@ -167,14 +167,17 @@ study-material/
 
 ---
 
-## Sidebars recolhíveis
+## Índice recolhível
 
-O Zensical não tem um feature flag para recolher o índice no desktop (só `toc.follow` e `toc.integrate`). O `docs/javascripts/sidebar.js` adiciona dois controles independentes:
+O Zensical não tem um feature flag para recolher as sidebars no desktop. A documentação oficial só expõe `toc.follow` e `toc.integrate`; o plugin `mkdocs-toggle-sidebar` ainda não é suportado (backlog `zensical/backlog#98`) e “collapsible sidebars” segue no backlog (`#178`).
 
-- **Índice** (direita): recolhe só a lista, mantendo o título e o botão de reabrir.
-- **Navegação** (esquerda): recolhe a sidebar inteira para uma faixa fina, liberando espaço para o conteúdo.
+Por isso o site reutiliza o **controle nativo do tema** (`#__toc` + `.md-sidebar-button`), que já existe para o índice no mobile. No desktop:
 
-Cada estado fica em `localStorage` (`pms.sidebar.toc.collapsed` e `pms.sidebar.nav.collapsed`), então um não interfere no outro e a preferência sobrevive à navegação. No mobile os botões ficam ocultos: o índice usa o popover nativo e a navegação usa o drawer.
+- o botão nativo aparece no topo do índice;
+- ao recolher, a sidebar inteira encolhe e o conteúdo ganha a largura;
+- o estado fica em `localStorage` (`pms.toc.collapsed`), sem criar botões novos.
+
+A navegação da esquerda não foi alterada: não há um controle equivalente no tema e forçá-lo exigiria uma modificação estrutural.
 
 ---
 
