@@ -155,12 +155,24 @@ study-material/
 │   ├── 18-lacunas-e-evolucao.md # o que não existe, benefício, por quê, adoção
 │   ├── 19-respostas.md        # respostas de quizzes, cálculos, ordens e flashcards
 │   ├── javascripts/study.js   # widgets (quiz, ordem, cálculo, flash, progresso)
+│   ├── javascripts/math.js    # KaTeX sob demanda para as fórmulas
 │   ├── stylesheets/extra.css  # estilos dos widgets + diagramas claro/escuro
 │   └── assets/
 │       ├── logo.svg
-│       └── diagrams/          # SVGs gerados + manifest.json
+│       ├── diagrams/          # SVGs gerados + manifest.json
+│       └── katex/             # CSS/JS/fontes do KaTeX (self-hosted)
 └── site/                      # gerado; não versionar
 ```
+
+---
+
+## Fórmulas matemáticas
+
+As fórmulas usam `pymdownx.arithmatex` e são renderizadas por **KaTeX self-hosted** em `docs/assets/katex/`. O CSS é carregado em todas as páginas, mas o JavaScript (267 KB) e as fontes só são baixados quando a página realmente tem uma fórmula, via `docs/javascripts/math.js`.
+
+- Nada vem de CDN: funciona offline e no GitHub Pages.
+- A navegação instantânea do Zensical é tratada por um `MutationObserver`.
+- Se uma fórmula não for suportada, o texto TeX original permanece visível em vez de virar um erro visual.
 
 ---
 

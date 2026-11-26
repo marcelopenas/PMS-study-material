@@ -9,8 +9,8 @@ repo_name = ""
 docs_dir = "docs"
 site_dir = "site"
 
-extra_css = ["stylesheets/extra.css"]
-extra_javascript = ["javascripts/study.js"]
+extra_css = ["assets/katex/katex.min.css", "stylesheets/extra.css"]
+extra_javascript = ["javascripts/math.js", "javascripts/study.js"]
 
 nav = [
   { "Início" = "index.md" },
