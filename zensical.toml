@@ -1,10 +1,12 @@
 [project]
 site_name = "Material de estudos de Plataformas & Microsserviços"
 site_description = "Material de estudo para a prova final de Plataformas, Microsserviços, DevOps e APIs, baseado nas aulas de 2026.2 e no projeto Microsserv52."
-site_author = "Guia de estudo"
-site_url = ""
-repo_url = ""
-repo_name = ""
+site_author = "Marcelo Peñas"
+site_url = "https://marcelopenas.github.io/PMS-study-material/"
+copyright = "© 2026 Marcelo Peñas"
+repo_url = "https://github.com/marcelopenas/PMS-study-material"
+repo_name = "marcelopenas/PMS-study-material"
+edit_uri = "edit/main/docs/"
 
 docs_dir = "docs"
 site_dir = "site"
@@ -38,6 +40,11 @@ nav = [
 
 [project.extra]
 generator = false
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/marcelopenas"
+name = "GitHub de Marcelo Peñas"
 
 [project.theme]
 language = "pt"
