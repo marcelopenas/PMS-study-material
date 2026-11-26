@@ -1,0 +1,73 @@
+name: Publish study material to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Zensical
+        run: pip install "zensical==0.0.74"
+
+      - name: Configure site URL for the repository
+        run: |
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          if [ "$REPO_NAME" = "${GITHUB_REPOSITORY_OWNER}.github.io" ]; then
+            SITE_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/"
+          else
+            SITE_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${REPO_NAME}/"
+          fi
+          echo "site_url=$SITE_URL"
+          python3 - "$SITE_URL" <<'PY'
+          import pathlib, re, sys
+          path = pathlib.Path("zensical.toml")
+          text = path.read_text(encoding="utf-8")
+          text = re.sub(r'^site_url\s*=\s*.*$', f'site_url = "{sys.argv[1]}"', text, count=1, flags=re.M)
+          path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Build site (with static diagrams)
+        run: ./build.sh
+
+      - name: Disable Jekyll processing
+        run: touch site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

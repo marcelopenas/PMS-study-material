@@ -1,0 +1,192 @@
+{
+  "fa664c1517fa": {
+    "alt": "Fluxograma",
+    "source": "00-mapa.md",
+    "index": 1
+  },
+  "60309a21e8e5": {
+    "alt": "Linha do tempo",
+    "source": "00-mapa.md",
+    "index": 2
+  },
+  "d9eb31b3934b": {
+    "alt": "Fluxograma",
+    "source": "01-projeto.md",
+    "index": 1
+  },
+  "5c3efbd7e47f": {
+    "alt": "Fluxograma",
+    "source": "01-projeto.md",
+    "index": 2
+  },
+  "36631a10ec45": {
+    "alt": "Fluxograma",
+    "source": "01-projeto.md",
+    "index": 3
+  },
+  "274390f23511": {
+    "alt": "Fluxograma",
+    "source": "02-distribuidos.md",
+    "index": 1
+  },
+  "f790fadee546": {
+    "alt": "Diagrama de sequência",
+    "source": "02-distribuidos.md",
+    "index": 2
+  },
+  "895cf059c379": {
+    "alt": "Diagrama de sequência",
+    "source": "02-distribuidos.md",
+    "index": 3
+  },
+  "1c1c5ec57abc": {
+    "alt": "Fluxograma",
+    "source": "02-distribuidos.md",
+    "index": 4
+  },
+  "be9759ca3562": {
+    "alt": "Fluxograma",
+    "source": "03-containers.md",
+    "index": 1
+  },
+  "3d038e001117": {
+    "alt": "Fluxograma",
+    "source": "05-microsservicos-ddd.md",
+    "index": 1
+  },
+  "4009699e6ab1": {
+    "alt": "Fluxograma",
+    "source": "05-microsservicos-ddd.md",
+    "index": 2
+  },
+  "0d8b67f53d87": {
+    "alt": "Fluxograma",
+    "source": "06-arquiteturas.md",
+    "index": 1
+  },
+  "c6b6f581cfe9": {
+    "alt": "Fluxograma",
+    "source": "06-arquiteturas.md",
+    "index": 2
+  },
+  "de1aa78c1261": {
+    "alt": "Diagrama de sequência",
+    "source": "07-seguranca.md",
+    "index": 1
+  },
+  "70803a738446": {
+    "alt": "Diagrama de sequência",
+    "source": "07-seguranca.md",
+    "index": 2
+  },
+  "008ef4a8ffc3": {
+    "alt": "Fluxograma",
+    "source": "08-eventos.md",
+    "index": 1
+  },
+  "354b2fbab093": {
+    "alt": "Diagrama de sequência",
+    "source": "08-eventos.md",
+    "index": 2
+  },
+  "715c356ecdec": {
+    "alt": "Diagrama de sequência",
+    "source": "08-eventos.md",
+    "index": 3
+  },
+  "d358f134510d": {
+    "alt": "Diagrama de sequência",
+    "source": "08-eventos.md",
+    "index": 4
+  },
+  "f0395c0e886a": {
+    "alt": "Diagrama de sequência",
+    "source": "09-confiabilidade.md",
+    "index": 1
+  },
+  "8bc780520361": {
+    "alt": "Fluxograma",
+    "source": "09-confiabilidade.md",
+    "index": 2
+  },
+  "6fd33645287f": {
+    "alt": "Fluxograma",
+    "source": "09-confiabilidade.md",
+    "index": 3
+  },
+  "5016981517da": {
+    "alt": "Fluxograma",
+    "source": "10-kubernetes-ha.md",
+    "index": 1
+  },
+  "324914d9bcfb": {
+    "alt": "Diagrama de sequência",
+    "source": "10-kubernetes-ha.md",
+    "index": 2
+  },
+  "83d8dc50a0b7": {
+    "alt": "Diagrama de estados",
+    "source": "10-kubernetes-ha.md",
+    "index": 3
+  },
+  "6bcc7d5e861d": {
+    "alt": "Fluxograma",
+    "source": "10-kubernetes-ha.md",
+    "index": 4
+  },
+  "a83278d323db": {
+    "alt": "Fluxograma",
+    "source": "10-kubernetes-ha.md",
+    "index": 5
+  },
+  "4bf2ba568eec": {
+    "alt": "Diagrama de sequência",
+    "source": "11-observabilidade.md",
+    "index": 1
+  },
+  "495dd0e1f7da": {
+    "alt": "Fluxograma",
+    "source": "11-observabilidade.md",
+    "index": 2
+  },
+  "649ead833c4c": {
+    "alt": "Fluxograma",
+    "source": "11-observabilidade.md",
+    "index": 3
+  },
+  "a83e238643ac": {
+    "alt": "Fluxograma",
+    "source": "12-nuvem-custos.md",
+    "index": 1
+  },
+  "c0f12a1b47bb": {
+    "alt": "Fluxograma",
+    "source": "12-nuvem-custos.md",
+    "index": 2
+  },
+  "eee9dafee399": {
+    "alt": "Fluxograma",
+    "source": "12-nuvem-custos.md",
+    "index": 3
+  },
+  "3c9aa134c123": {
+    "alt": "Fluxograma",
+    "source": "14-frontend.md",
+    "index": 1
+  },
+  "111e3241344e": {
+    "alt": "Diagrama de sequência",
+    "source": "15-estudo-de-caso.md",
+    "index": 1
+  },
+  "2f5b4ff86711": {
+    "alt": "Diagrama de sequência",
+    "source": "15-estudo-de-caso.md",
+    "index": 2
+  },
+  "ec6ce2a65264": {
+    "alt": "Fluxograma",
+    "source": "index.md",
+    "index": 1
+  }
+}

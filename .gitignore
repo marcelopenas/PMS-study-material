@@ -1,0 +1,19 @@
+# build
+site/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+
+# zensical/uv
+.cache/
+.uv/
+
+# opcional para regenerar diagramas (mmdc)
+node_modules/
+
+# editores / sistema
+.DS_Store
+.idea/
+.vscode/
