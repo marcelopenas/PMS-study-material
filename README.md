@@ -1,4 +1,4 @@
-# Guia de estudo — Plataformas, Microsserviços, DevOps e APIs
+# PMS Study Material <img src="docs/assets/logo.svg" align="right" width="115" alt="PMS Study Material logo">
 
 Material de estudo para a prova final, escrito em português, combinando:
 
