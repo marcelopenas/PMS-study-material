@@ -2,9 +2,9 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Kubernetes não deixa um sistema disponível. Ele **reconcilia estado desejado** e oferece primitivas para que você construa disponibilidade — réplicas, probes, rollout, orçamento de interrupção, autoscaling. A diferença entre "tem Deployment" e "tem HA" está nos detalhes: quantas réplicas, em quantas zonas, com qual orçamento, contra qual ponto único de falha.
+Kubernetes reconcilia estado desejado e oferece peças para construir disponibilidade: réplicas, probes, rollout, orçamento de interrupção e autoscaling. Ter um Deployment, porém, não é o mesmo que ter HA. O que decide é quantas réplicas existem, onde elas rodam, qual é o orçamento de interrupção e quais pontos únicos continuam expostos.
 
-!!! quote "A ideia central"
+!!! quote "Como funciona"
     Você declara **o que quer** (`replicas: 2`, imagem X, readiness em `/health`). O control plane compara com **o que existe** e age para convergir. Toda a operação é um loop de reconciliação.
 
 ---
@@ -117,7 +117,7 @@ spec:
 ```
 
 !!! warning "Detalhe que vale nota: endpoint agregado nas três probes"
-    O manifesto aponta startup, liveness e readiness para `/actuator/health`. No Spring Boot, esse endpoint **agrega** todos os health indicators, inclusive o banco. O ideal é usar `/actuator/health/liveness` e `/actuator/health/readiness` (grupos do Actuator): assim a liveness não reinicia a JVM quando o banco apenas oscila. O Exchange expõe `/health/live`, `/health/ready` e aliases `/actuator/health*`. **Esta é uma melhoria concreta e barata que a banca pode pedir.**
+    O manifesto aponta startup, liveness e readiness para `/actuator/health`. No Spring Boot, esse endpoint **agrega** todos os health indicators, inclusive o banco. O ideal é usar `/actuator/health/liveness` e `/actuator/health/readiness` (grupos do Actuator): assim a liveness não reinicia a JVM quando o banco apenas oscila. O Exchange expõe `/health/live`, `/health/ready` e aliases `/actuator/health*`. É uma melhoria concreta e barata.
 
 ### Service e Ingress
 
@@ -234,7 +234,7 @@ stateDiagram-v2
     Restarting --> Starting
 ```
 
-### Regras de ouro
+### Regras práticas
 
 1. **Liveness nunca depende de serviço externo.** Banco oscilou? Reiniciar todas as réplicas piora.
 2. **Readiness pode depender (com cautela).** Se todas as réplicas dependem do mesmo banco, todas saem juntas — o serviço "desaparece" em vez de retornar erro.
@@ -264,7 +264,7 @@ O projeto reserva `250m/256Mi` e limita `500m/512Mi` por pod. Com 6 serviços ×
 
 ### Onde os pods caem?
 
-O scheduler considera requests, afinidade, taints e topologia. O projeto **não** declara `podAntiAffinity` nem `topologySpreadConstraints`, então nada garante que as duas réplicas fiquem em nós/zonas diferentes. Em um cluster de 2 nós, o scheduler tende a espalhar, mas "tende" não é garantia.
+O scheduler considera requests, afinidade, taints e topologia. O projeto não declara `podAntiAffinity` nem `topologySpreadConstraints`, então nada garante que as duas réplicas fiquem em nós/zonas diferentes. Em um cluster de 2 nós, o scheduler tende a espalhar, mas "tende" não é garantia.
 
 ```yaml
 # Melhoria recomendada: espalhar por zona
@@ -276,7 +276,7 @@ topologySpreadConstraints:
       matchLabels: { app: product }
 ```
 
-!!! tip "A pergunta de HA que separa candidatos"
+!!! tip "Uma pergunta de HA"
     "Duas réplicas no mesmo nó sobrevivem à queda de uma zona?" Não. Réplica é redundância de **processo**; multi-AZ é redundância de **infraestrutura**. As duas são necessárias e nenhuma substitui a outra.
 
 ---
@@ -317,7 +317,7 @@ spec:
       stabilizationWindowSeconds: 300
 ```
 
-### O que o HPA **não** resolve
+### O que o HPA não resolve
 
 - **Banco**: mais pods = mais conexões. O teto do RDS chega antes do teto de CPU.
 - **Latência de dependência**: se o Product (ou o Exchange, quando a conversão for ativada) está lento, escalar o chamador só cria mais threads esperando.
@@ -339,7 +339,7 @@ spec:
 | Conexões RDS (pool 8) | 112 ÷ (3 × 8) | ~4,7 réplicas/serviço de BD |
 | Conexões RDS (pool 10) | 112 ÷ (3 × 10) | ~3,7 réplicas/serviço de BD |
 
-!!! warning "A conta que derruba a arquitetura"
+!!! warning "A conta que limita a arquitetura"
     Com HPA máximo de 6 em **três** serviços que usam banco e pool 8, o pior caso é $6 \times 3 \times 8 = 144$ conexões — acima de 112. O projeto mediu 52/112 no cenário real porque o Hikari abre conexões sob demanda e nem todos os serviços estavam no máximo. **Dimensionar o pool por `max_connections ÷ (serviços × maxReplicas)` é obrigatório antes de subir o HPA.**
 
 ---
@@ -498,7 +498,7 @@ O SLO do projeto é **99,5% em 28 dias** = 201,6 min de error budget. Cada mecan
 | 1 h com 1% de erro | 0,6 min / 201,6 | ≈ 0,3% |
 | Um dia inteiro fora | 1.440 / 201,6 | 714% — estoura o SLO muitas vezes |
 
-!!! tip "A ligação que a banca quer"
+!!! tip "A conexão com o SLO"
     Não basta listar HPA/PDB/probes. Explique **qual parcela do SLI** cada um protege: readiness e rollout protegem contra erros de deploy; réplicas e multi-AZ contra falhas de processo/infra; HPA/CA contra saturação; RDS Multi-AZ contra falha de dados. O projeto cobre bem o primeiro grupo, parcialmente o segundo e **não cobre** o terceiro.
 
 !!! example "O que os números medidos dizem"
@@ -532,7 +532,7 @@ kubectl -n platform get events --sort-by=.lastTimestamp
 
 ---
 
-## 13. Anti-padrões de HA (decore cinco)
+## 13. Anti-padrões de HA (cinco comuns)
 
 | Anti-padrão | Por que é ruim | Correção |
 | --- | --- | --- |

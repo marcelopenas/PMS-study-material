@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-SOLID decide como uma classe deve ser. Clean/Hexagonal decidem **onde ela mora e quem pode importar quem**. A pergunta que une os dois: *se o framework mudar, quantas classes de negócio eu preciso reescrever?*
+SOLID trata do desenho de classes. Clean e Hexagonal tratam de onde cada classe fica e quais dependências pode ter. A pergunta que conecta os dois é prática: se o framework mudar, quanto código de negócio precisa mudar?
 
 ---
 
@@ -130,7 +130,7 @@ Graus de CQRS:
 3. **Pesado:** event store + projeções (combina com Event Sourcing).
 
 !!! warning "CQRS não é padrão universal"
-    Adiciona consistência eventual, duplicação de modelos e complexidade operacional. Use onde há assimetria real (catálogo com milhões de leituras e poucas escritas) ou necessidade de auditoria. O projeto **não** usa CQRS: o catálogo lê e escreve nas mesmas tabelas; o volume medido não justificou.
+    Adiciona consistência eventual, duplicação de modelos e complexidade operacional. Use onde há assimetria real (catálogo com milhões de leituras e poucas escritas) ou necessidade de auditoria. O projeto não usa CQRS: o catálogo lê e escreve nas mesmas tabelas; o volume medido não justificou.
 
 ---
 
@@ -209,7 +209,7 @@ A inversão de dependência permite testar a regra de negócio **sem** infraestr
 </div>
 
 <div class="study-quiz" data-answer="a">
-  <p class="q">3. Por que o projeto **não** aplica CQRS no catálogo?</p>
+  <p class="q">3. Por que o projeto não aplica CQRS no catálogo?</p>
   <ul class="options">
     <li data-key="a">Porque o volume e a assimetria leitura/escrita não justificam a consistência eventual e a infraestrutura extra.</li>
     <li data-key="b">Porque CQRS exige Kafka, que o projeto não tem.</li>

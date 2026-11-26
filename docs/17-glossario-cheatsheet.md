@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span>
 
-Revisão de véspera: definições curtas, fórmulas, números do projeto, comandos e frases que valem ponto. Se algo aqui não estiver claro, volte ao capítulo correspondente.
+Revisão de véspera: definições curtas, fórmulas, números do projeto, comandos e frases úteis. Se algo aqui não estiver claro, volte ao capítulo correspondente.
 
 ---
 
@@ -340,5 +340,5 @@ Clique (ou use Enter/Espaço) para virar.
 | Questões | [16](16-simulado.md) |
 | Lacunas e evolução | [18](18-lacunas-e-evolucao.md) |
 
-!!! quote "Última frase"
-    Se você só puder levar uma ideia: **arquitetura é o conjunto de decisões caras de desfazer — e a prova quer saber por que você as tomou, quanto custaram e como você mediu o resultado.**
+!!! quote "Em resumo"
+    Se você só puder levar uma ideia: **arquitetura é o conjunto de decisões caras de desfazer — e o que importa é saber por que você as tomou, quanto custaram e como mediu o resultado.**

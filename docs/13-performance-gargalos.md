@@ -2,9 +2,9 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-O capítulo mais importante para a arguição: o projeto não "acha" que escala — ele **mediu**, errou, corrigiu e mediu de novo. A história do pool de conexões é o melhor exemplo de engenharia de performance do repositório, porque mostra um gargalo saindo do banco e reaparecendo em outro lugar.
+O projeto não supõe que escala: ele mede, erra, corrige e mede de novo. A história do pool de conexões é o exemplo mais claro, porque mostra o gargalo saindo do banco e reaparecendo em outro ponto.
 
-!!! quote "Regra de ouro"
+!!! quote "Princípio"
     Um componente pode continuar sendo o gargalo e ainda assim passar: o objetivo não é remover todo gargalo, é manter cada um **abaixo do requisito** ou tornar sua falha segura e observável.
 
 ---
@@ -88,12 +88,12 @@ $$req/s = \frac{cpu\_cores}{cpu\_segundos\_por\_requisição}$$
 
 ### O que aconteceu, em narrativa
 
-1. **Baseline (50 req/s).** Tudo confortável: p95 313 ms, zero erro. O HPA nem sai do mínimo. É o retrato do dia a dia, não uma prova de capacidade.
+1. **Baseline (50 req/s).** Tudo confortável: p95 313 ms, zero erro. O HPA nem sai do mínimo. É o retrato do dia a dia, não uma medida de capacidade.
 2. **Pool 10 a 400 req/s.** O Product escala para 6 réplicas e o throughput chega a 382,7/s **sem erro HTTP**. Parece sucesso. Mas o RDS registra 70–71 conexões e, depois do teste, **dois pods de Product entram em crash-loop** com `remaining connection slots are reserved`. O "zero erro" era sorte temporal: a falha apareceu no startup seguinte.
 3. **Pool 5.** A conexão com o banco deixa de estourar, mas o gargalo vai **para dentro do pod**: Hikari com `total=5, active=5, idle=0, waiting=62` e timeouts de 3 s. Resultado: 107 respostas 5xx reais (0,42%), p95 2,21 s e throughput de apenas 209,8/s. Corrigir um limite piorou o outro.
 4. **Pool 8.** O equilíbrio: 299,6/s, **zero erro**, p95 1,25 s, Product 6/6 sem restart, RDS em 52/112 conexões. O banco tem folga; a latência, não.
 
-!!! danger "A lição que a banca quer ouvir"
+!!! danger "O que o teste mostrou"
     "Zero erros" não prova estabilidade. O pool 10 teve zero erros **durante** o teste e derrubou pods **depois**. Um teste precisa observar o **pós-condição** (restarts, conexões residuais, pods prontos), não só o relatório do k6.
 
 ### HPA e nós
@@ -137,7 +137,7 @@ Mas o Hikari abre conexões **sob demanda**; por isso a medição com pool 8 fic
 !!! example "Dimensionamento correto"
     Se o RDS permite 112 e há 3 serviços de banco com HPA máximo 6:
     $$pool \le \frac{112}{3 \times 6} \approx 6{,}2$$
-    Um pool de 6 seria o máximo seguro. O projeto reteve 8 e limitou o HPA a 6 — uma escolha que funciona no cenário medido, mas não no pior caso simultâneo. **Diga isso na prova; é maturidade, não fraqueza.**
+    Um pool de 6 seria o máximo seguro. O projeto reteve 8 e limitou o HPA a 6 — uma escolha que funciona no cenário medido, mas não no pior caso simultâneo. Vale dizer isso: é maturidade, não fraqueza.
 
 ### Pool pequeno × grande
 
@@ -164,8 +164,8 @@ Executado no Compose local, não em AWS:
 
 O caminho de escrita é **mais pesado** (transação, chamada ao Product, validação), mas a 5/s fica bem abaixo do SLO de 800 ms depois de aquecido. O p99 alto no warm-up é cold start/JIT e agente OTel.
 
-!!! warning "O que esse teste **não** prova"
-    Não prova capacidade de escrita em AWS, nem concorrência alta, nem falha do Exchange, nem idempotência sob retry. A documentação lista essas lacunas — e a banca valoriza quem as lista.
+!!! warning "O que esse teste não prova"
+    Não prova capacidade de escrita em AWS, nem concorrência alta, nem falha do Exchange, nem idempotência sob retry. A documentação lista essas lacunas, e listá-las com honestidade conta a favor.
 
 ---
 

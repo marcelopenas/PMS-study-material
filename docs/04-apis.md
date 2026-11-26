@@ -2,9 +2,9 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Em um monólito, uma chamada de função é verificada pelo compilador. Em microsserviços, a chamada atravessa a rede e o "compilador" é um **contrato**. API é a fronteira que permite que dois times mudem de tecnologia sem quebrar o vizinho — desde que o contrato seja explícito, versionado e testado.
+Em um monólito, o compilador verifica uma chamada de função. Em microsserviços, a chamada atravessa a rede e quem faz esse papel é o contrato. A API é a fronteira que permite a dois times mudar de tecnologia sem quebrar o vizinho, desde que o contrato seja explícito, versionado e testado.
 
-!!! quote "Definição útil"
+!!! quote "Definição"
     Contrato = método + caminho + autenticação + payload + códigos de status + comportamento de falha. Documentar só o payload é documentar metade.
 
 ---
@@ -38,7 +38,7 @@ O projeto está no **nível 2**: recursos, verbos e status corretos, sem HATEOAS
 | Método | Seguro? | Idempotente? | Uso |
 | --- | --- | --- | --- |
 | GET | Sim | Sim | Ler recurso |
-| POST | Não | **Não** | Criar; exige cuidado com retry |
+| POST | Não | Não | Criar; exige cuidado com retry |
 | PUT | Não | Sim | Substituir/definir estado completo |
 | PATCH | Não | Não necessariamente | Alteração parcial |
 | DELETE | Não | Sim | Remover (repetir dá 204/404) |
@@ -157,7 +157,7 @@ O fluxo de imagem é em duas etapas: o serviço emite uma **URL pré-assinada** 
 Repare: `product` traz **apenas o id**. O nome e o preço atual não são copiados para o pedido; o total praticado é. É DDD aplicado ao payload.
 
 !!! warning "Duas divergências entre contrato e implementação"
-    O exemplo acima segue o **contrato** do exercício (`product: { id }`). A implementação checada devolve `productId` no item, e não o objeto aninhado. E a conversão `?currency=BRL` está prevista, mas responde **422** hoje. A UI usa USD e lê `productId`. São exatamente os casos em que um **teste de contrato** teria valor: o documento descreve a intenção, o código descreve o estado.
+    O exemplo acima segue o **contrato** do exercício (`product: { id }`). A implementação checada devolve `productId` no item, e não o objeto aninhado. E a conversão `?currency=BRL` está prevista, mas responde **422** hoje. A UI usa USD e lê `productId`. São os casos em que um **teste de contrato** teria valor: o documento descreve a intenção, o código descreve o estado.
 
 ### Exchange e Gateway
 
@@ -177,7 +177,7 @@ Repare: `product` traz **apenas o id**. O nome e o preço atual não são copiad
 
 ---
 
-## 5. Erros: o que a banca quer ver
+## 5. Erros: o que a API precisa comunicar
 
 Um bom erro tem **status correto**, **código estável** e **mensagem segura**:
 
@@ -228,7 +228,7 @@ No projeto, exceções de dependência viram `503` com mensagem clara quando o c
 > O domínio é simples e orientado a recursos; o custo de um gateway GraphQL (N+1, autorização por campo, cache) não se pagaria. REST + OpenAPI dá cache HTTP, status claros e ferramentas prontas. Para agregação de múltiplas telas, um BFF seria a alternativa antes de GraphQL.
 
 **"Qual a diferença entre 400 e 422 aqui?"**
-> 400 é requisição malformada/inválida (JSON, UUID, quantidade). 422 é semanticamente inprocessável: a requisição está bem formada, mas a moeda não é suportada. O projeto usa 422 para moeda desconhecida no Order/Exchange — e, hoje, para **qualquer** moeda ≠ USD no Order, porque a integração de conversão está pendente.
+> 400 é requisição malformada/inválida (JSON, UUID, quantidade). 422 é semanticamente inprocessável: a requisição está bem formada, mas a moeda não é suportada. O projeto usa 422 para moeda desconhecida no Order/Exchange — e, hoje, para qualquer moeda ≠ USD no Order, porque a integração de conversão está pendente.
 
 ---
 

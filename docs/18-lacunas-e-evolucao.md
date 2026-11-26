@@ -2,10 +2,10 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Um projeto maduro não é definido só pelo que tem, mas pelo que **decidiu não ter** — e por saber o preço dessa decisão. A documentação da Microsserv52 é incomum porque lista as lacunas sem maquiar. Este capítulo pega cada lacuna, explica o conceito, mostra o benefício que ela traria, o motivo de não estar lá e o caminho de adoção.
+Um projeto também é definido pelo que decide não fazer. A documentação da Microsserv52 lista essas ausências abertamente. Este capítulo explica cada uma: o que é, o que renderia, por que ficou de fora e o que seria preciso para adotar.
 
-!!! quote "A regra deste capítulo"
-    **Ausente não significa esquecido.** Toda lacuna tem um motivo (escopo, custo, tempo ou risco) e um custo associado. Na prova, a resposta boa não é "não temos", é **"não temos porque X; ganharíamos Y; o primeiro passo seria Z; mediríamos W"**.
+!!! quote "Critério deste capítulo"
+    **Ausente não significa esquecido.** Toda lacuna tem um motivo (escopo, custo, tempo ou risco) e um custo associado. A resposta mais útil não é "não temos", mas **"não temos porque X; ganharíamos Y; o primeiro passo seria Z; mediríamos W"**.
 
 ---
 
@@ -53,7 +53,7 @@ Um projeto maduro não é definido só pelo que tem, mas pelo que **decidiu não
 | Testes de carga e gargalos | [Performance](13-performance-gargalos.md) |
 | Cart, SSR/BFF, admin | [Frontend](14-frontend.md) |
 
-!!! tip "A ordem não é a mesma para todo mundo"
+!!! tip "A ordem depende do contexto"
     Em um produto real, P0/P1 mudam com receita, contrato e risco regulatório. Em uma loja demo, Multi-AZ e restore drill ainda vêm antes de Kafka — porque protegem o **caminho que já existe**, enquanto Kafka habilitaria um caminho novo.
 
 ---
@@ -376,7 +376,7 @@ Itens menores ou de segunda ordem, com o mesmo formato mental: **o que é → ga
 | mTLS/mesh ou Cilium | Zero Trust | cobertura/rotação |
 | Schema/role por serviço | Isolamento real | grants, acessos negados |
 
-!!! tip "A ordem se justifica por risco, não por moda"
+!!! tip "A ordem segue o risco"
     Multi-AZ e breaker protegem o **caminho que já existe**; Kafka e Cart habilitam caminhos **novos**. Em um demo com prazo, primeiro se protege o que está no ar.
 
 ---
@@ -396,11 +396,11 @@ Itens menores ou de segunda ordem, com o mesmo formato mental: **o que é → ga
 | DR multi-região | Duplica infraestrutura | Só com requisito real |
 
 !!! warning "Números são ordem de grandeza"
-    Reconfira preços na data da prova; a região, o tráfego e o tipo de instância mudam a conta. O que não muda é o método: **custo fixo + variável + operação**.
+    Reconfira preços na data da consulta; a região, o tráfego e o tipo de instância mudam a conta. O que não muda é o método: **custo fixo + variável + operação**.
 
 ---
 
-## 6. Como falar de lacunas na prova
+## 6. Como falar de lacunas
 
 Use o template:
 
@@ -425,7 +425,7 @@ Exemplos:
 
 ---
 
-## 7. O que **não** é lacuna (para não errar)
+## 7. O que não é lacuna (para não errar)
 
 | Item | Por que não é lacuna |
 | --- | --- |
@@ -440,8 +440,8 @@ Exemplos:
 | CodeQL/Dependabot/secret scanning | Existem |
 | Static export + CDN | Decisão, não ausência |
 
-!!! quote "A frase final"
-    **Uma lacuna sem custo é só uma opinião.** A resposta forte nomeia o benefício, o preço e a métrica — e reconhece que, no contexto do projeto, não ter pode ser a decisão certa.
+!!! quote "Em resumo"
+    **Uma lacuna sem custo é só uma opinião.** Uma resposta forte nomeia o benefício, o preço e a métrica — e reconhece que, no contexto do projeto, não ter pode ser a decisão certa.
 
 ---
 
@@ -450,7 +450,7 @@ Exemplos:
 <div data-study-score></div>
 
 <div class="study-quiz" data-answer="c">
-  <p class="q">1. Qual é a melhor justificativa para **não** ter Kafka no projeto?</p>
+  <p class="q">1. Qual é a melhor justificativa para não ter Kafka no projeto?</p>
   <ul class="options">
     <li data-key="a">Kafka não serve para microsserviços.</li>
     <li data-key="b">Kafka é incompatível com Kubernetes.</li>
@@ -472,7 +472,7 @@ Exemplos:
 </div>
 
 <div class="study-quiz" data-answer="d">
-  <p class="q">3. O que o mTLS **não** resolve sozinho?</p>
+  <p class="q">3. O que o mTLS não resolve sozinho?</p>
   <ul class="options">
     <li data-key="a">Criptografia em trânsito entre serviços.</li>
     <li data-key="b">Prova de identidade do workload.</li>
@@ -501,7 +501,7 @@ Exemplos:
     <li data-key="c">“Na borda sim (TLS, JWT, CSRF, autorização por objeto); no leste-oeste não (sem mTLS, NetworkPolicy parcial). O próximo passo é default-deny e, depois, mesh/Cilium.”</li>
     <li data-key="d">“Sim, porque o cluster é privado.”</li>
   </ul>
-  <p class="explain">Zero Trust é verificação contínua, não “rede privada”. A resposta madura separa camadas e aponta o próximo passo mensurável.</p>
+  <p class="explain">Zero Trust é verificação contínua, não “rede privada”. Uma boa resposta separa camadas e aponta o próximo passo mensurável.</p>
 </div>
 
 ## Checklist

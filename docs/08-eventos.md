@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Comunicação síncrona acopla **disponibilidade** e **latência**: se o vizinho está lento, você está lento; se ele cai, você cai. Eventos trocam esse acoplamento por **consistência eventual** e uma nova classe de problemas — duplicatas, ordem, esquema e diagnóstico. Este capítulo ensina o ferramental e depois o usa para analisar a maior lacuna do projeto.
+Comunicação síncrona acopla disponibilidade e latência: se o vizinho está lento, você está lento; se ele cai, você cai. Eventos trocam esse acoplamento por consistência eventual e por problemas novos, como duplicatas, ordem, evolução de esquema e diagnóstico. O capítulo apresenta o ferramental e depois o usa para analisar a maior lacuna do projeto.
 
 !!! quote "Eventos são fatos"
     Um evento é um registro **imutável** de algo que aconteceu, no passado. Não é um comando ("cobre o cartão") nem um pedido de leitura. É por isso que o log pode ser reprocessado: os fatos não mudam.
@@ -295,7 +295,7 @@ Se fosse implementado, as opções seriam **Amazon MSK** (gerenciado, caro), **S
 
 <label class="study-check"><input type="checkbox" data-key="e-kafka"> Explico log × fila, partição, chave e offset.</label>
 <label class="study-check"><input type="checkbox" data-key="e-delivery"> Distingo at-most/at-least/exactly-once e sei por que idempotência é obrigatória.</label>
-<label class="study-check"><input type="checkbox" data-key="e-outbox"> Desenho o outbox e explico o que ele **não** garante.</label>
+<label class="study-check"><input type="checkbox" data-key="e-outbox"> Desenho o outbox e explico o que ele não garante.</label>
 <label class="study-check"><input type="checkbox" data-key="e-saga"> Comparo coreografia e orquestração, com compensação.</label>
 <label class="study-check"><input type="checkbox" data-key="e-proj"> Explico por que o projeto não tem Kafka e o que faria primeiro.</label>
 

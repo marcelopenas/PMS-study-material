@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Este capítulo é a prova de fogo: pegar todas as peças e defendê-las juntas. A banca não quer ouvir a documentação em ordem; quer ver você **navegar entre decisões** — "se mudar isso, o que quebra? quanto custa? como você mede?".
+Este capítulo junta as peças e mostra como elas se sustentam em conjunto. Não basta repetir a documentação em ordem; o que se espera é navegar entre decisões: se mudar isso, o que quebra? Quanto custa? Como você mede?
 
 ---
 
@@ -125,7 +125,7 @@ sequenceDiagram
 | Upload malicioso | Custo/abuso | Validação, presigned, limite | WAF/rate limit ativo | 4xx/429 |
 | Segredo vazado | Acesso ao banco/S3 | Secret + IRSA; rotação manual | Secrets Manager/Vault | incidente |
 
-!!! example "Pergunta de ouro: 'e se o banco cair?'"
+!!! example "Pergunta frequente: 'e se o banco cair?'"
     "Todos os serviços que usam Postgres falham: catálogo, pedidos e contas. Auth também depende de Account para credenciais, então login falha. O Gateway continua de pé, mas retorna 5xx/503. Como o RDS é Single-AZ, a recuperação é restore/PITR (RTO 1 h, RPO 5 min), não failover de 1 min. O SLO de 99,5% absorve parte disso, mas um evento longo estoura o budget. A correção é Multi-AZ; o custo sobe."
 
 ---
@@ -196,7 +196,7 @@ sequenceDiagram
 | 9–10 | Limites e próximos passos | "Multi-AZ, outbox, breaker, GitOps" |
 
 !!! tip "Ensaie a narrativa de falha"
-    A banca lembra de histórias, não de listas. "O pool 10 derrubou dois pods depois do teste" é memorável e prova que você mediu. Use números específicos e diga o que aprendeu.
+    Quem avalia lembra de histórias, não de listas. "O pool 10 derrubou dois pods depois do teste" é memorável e mostra que você mediu. Use números específicos e diga o que aprendeu.
 
 ---
 

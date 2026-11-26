@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Container não é "uma VM pequena". É um **processo isolado** por recursos do kernel (namespaces e cgroups) rodando sobre o **mesmo kernel** do host. Entender essa frase resolve metade das perguntas de prova — e a outra metade é saber o que o Compose **não** faz.
+Um container é um processo isolado por namespaces e cgroups, rodando sobre o kernel do host. Não é uma máquina virtual pequena. Essa diferença explica o consumo de recursos, os limites de isolamento e também o que o Compose não resolve.
 
 ---
 
@@ -160,7 +160,7 @@ flowchart LR
 | Dev/prod parity | Mesma imagem em Compose, K8s e EKS |
 | Admin processes | `seed_demo.py`, migrations Flyway como one-off |
 
-!!! tip "A ligação com o capítulo de nuvem"
+!!! tip "Ligação com nuvem"
     O mesmo artefato (imagem) roda em Compose, MicroK8s, LocalStack e EKS. É isso que torna a migração uma questão de **deploy**, não de reescrita — o argumento central da aula de modelos de serviço.
 
 ---

@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Monitoramento responde perguntas que você já sabia fazer ("a taxa de erro está abaixo de 1%?"). Observabilidade permite investigar perguntas que você **não** previu ("por que 7% das requisições de clientes móveis em São Paulo deram timeout nesta terça?"). Em um sistema com seis serviços, três frontends, banco e provedor externo, a segunda pergunta é a que aparece no plantão.
+Monitoramento responde perguntas conhecidas: a taxa de erro está abaixo de 1%? Observabilidade permite investigar as que você não previu: por que 7% das requisições de clientes móveis em São Paulo deram timeout nesta terça? Em um sistema com seis serviços, três frontends, banco e provedor externo, a segunda pergunta é a que aparece no plantão.
 
 ---
 
@@ -21,7 +21,7 @@ Os três descrevem o mesmo evento por ângulos diferentes. Um `POST /orders` que
 - uma linha `{"level":"ERROR","trace_id":"...","route":"/orders"}`;
 - um trace com spans de Gateway, Order, Product e Exchange, um marcado como erro.
 
-!!! tip "A pergunta certa para cada pilar"
+!!! tip "Uma pergunta para cada pilar"
     Métrica diz **que** algo mudou; log diz **o quê**; trace diz **onde**. Perfil diz **por que** o CPU está alto. Sem correlação (um ID comum), você tem três ferramentas, não observabilidade.
 
 ---
@@ -303,7 +303,7 @@ Faro: preflight 204; POST /faro/collect 202
 | Frontend/Faro | Spans de browser, exceções, Web Vitals |
 | Trace service graph | Taxa, falhas e p95 entre serviços |
 
-!!! note "A distinção que vale nota"
+!!! note "Uma distinção importante"
     Os **Java** serviços carregam o agente OTel e exportam **apenas traces**; as métricas continuam no `/actuator/prometheus`. O **Exchange** (Python) exporta métricas e logs, mas **não tem traces** — lacuna documentada. Nenhum serviço carrega agente de profiling. Frontends usam **Faro**, com redação de query string e dados privados.
 
 ---

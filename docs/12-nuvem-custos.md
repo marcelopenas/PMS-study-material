@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Nuvem não é "servidor de outra pessoa". É um modelo operacional com **cinco características do NIST**, uma matriz de responsabilidades e uma conta que continua correndo quando ninguém está usando. A prova gosta de três perguntas: *quem opera o quê?*, *quanto custa o idle?* e *por que não a opção mais simples?*
+Nuvem é um modelo operacional, não apenas um servidor alugado. Ele tem cinco características do NIST, uma matriz de responsabilidades e um custo que continua correndo quando ninguém usa o sistema. Três perguntas ajudam a organizar o assunto: quem opera o quê, quanto custa o idle e por que não escolher a opção mais simples.
 
 ---
 
@@ -29,7 +29,7 @@ Nuvem não é "servidor de outra pessoa". É um modelo operacional com **cinco c
 | --- | --- | --- | --- | --- | --- | --- |
 | Dados e acesso | você | você | você | você | você | você |
 | Aplicação | você | você | você | você | você | provedor |
-| Middleware | você | você | **você** | provedor | provedor | provedor |
+| Middleware | você | você | você | provedor | provedor | provedor |
 | SO | você | você | provedor | provedor | provedor | provedor |
 | Virtualização | você | provedor | provedor | provedor | provedor | provedor |
 | Hardware | você | provedor | provedor | provedor | provedor | provedor |
@@ -42,9 +42,9 @@ Três leituras que valem nota:
 
 !!! example "Quem age quando algo acontece?"
     - Disco falha: provedor em IaaS/CaaS/PaaS/FaaS/SaaS.
-    - Falha no JDK: **você** em CaaS; provedor em PaaS.
+    - Falha no JDK: você em CaaS; provedor em PaaS.
     - Bug na aplicação: você em todos, exceto SaaS.
-    - Chave vaza: **você** em todos.
+    - Chave vaza: você em todos.
 
 ---
 
@@ -110,7 +110,7 @@ flowchart LR
 | **External Secrets Operator** | Sincroniza Secrets Manager/Vault |
 | **metrics-server** | Habilita HPA |
 
-No projeto: metrics-server + Cluster Autoscaler instalados; NLB criado por Terraform (não pelo controller); GitOps **não** usado; deploy shell-first. São escolhas conscientes, não desconhecimento.
+No projeto: metrics-server + Cluster Autoscaler instalados; NLB criado por Terraform (não pelo controller); GitOps não usado; deploy shell-first. São escolhas conscientes, não desconhecimento.
 
 ---
 
@@ -161,7 +161,7 @@ terraform -chdir=terraform/environments/aws apply
 ```
 
 !!! warning "Apply não é deploy"
-    Terraform cria VPC, EKS, RDS, ECR, S3 e CloudFront. **Workloads, HPAs, add-ons e Secrets** são aplicados depois por `kubectl`/script. Essa fronteira é explícita na documentação e cai em prova: IaC não é o mesmo que GitOps de aplicação.
+    Terraform cria VPC, EKS, RDS, ECR, S3 e CloudFront. **Workloads, HPAs, add-ons e Secrets** são aplicados depois por `kubectl`/script. Essa fronteira é explícita na documentação: IaC não é o mesmo que GitOps de aplicação.
 
 ### LocalStack e staging
 
@@ -174,7 +174,7 @@ Staging existe para **aceitação de versão** com dados sintéticos e telemetri
 
 ---
 
-## 6. Custos: a conta que a banca pede
+## 6. Custos: a conta que importa
 
 Premissas: `us-east-1`, on-demand, 730 h/mês, sem créditos, novembro/2026.
 
@@ -325,7 +325,7 @@ flowchart LR
 </div>
 
 <div class="study-quiz" data-answer="c">
-  <p class="q">4. O que o Terraform do projeto **não** faz?</p>
+  <p class="q">4. O que o Terraform do projeto não faz?</p>
   <ul class="options">
     <li data-key="a">Cria VPC, subnets e NAT.</li>
     <li data-key="b">Cria EKS, RDS, ECR e CloudFront.</li>

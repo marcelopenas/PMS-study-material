@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-"Está confiável?" é uma pergunta sem resposta até virar número. SRE resolve isso com três camadas: **SLI** (medida), **SLO** (meta) e **SLA** (contrato). Em volta delas, um conjunto de padrões impede que uma falha local vire indisponibilidade global.
+Confiabilidade precisa de números. SRE organiza isso em três camadas: SLI (medida), SLO (meta) e SLA (contrato). Em volta delas, padrões de resiliência evitam que uma falha local derrube o sistema inteiro.
 
 ---
 
@@ -31,7 +31,7 @@ Melhorar disponibilidade tem duas alavancas: **falhar menos** (↑ MTTF) ou **re
 | Série | $a_1 \times a_2 \times \cdots$ | Pior que o pior elo |
 | Paralelo | $1-(1-a)^n$ | Melhor, se falhas independentes |
 
-O projeto tem série no caminho (Gateway → Order → Product) e paralelo nas réplicas. O **banco** é elo único: RDS Single-AZ. Replicar serviços não resolve a disponibilidade do banco.
+O projeto tem série no caminho (Gateway → Order → Product) e paralelo nas réplicas. O banco é elo único: RDS Single-AZ. Replicar serviços não resolve a disponibilidade do banco.
 
 ---
 
@@ -58,7 +58,7 @@ $$SLI = \frac{\text{eventos bons}}{\text{eventos válidos}} \times 100\%$$
 | Atualidade | idade do último dado | cache refresh |
 
 !!! warning "Métricas de vaidade"
-    CPU, heap e GC **não** são SLIs. Um serviço a 95% de CPU pode estar perfeito; um a 10% pode estar fora do ar. SLI mede a experiência do usuário; CPU é causa, não sintoma.
+    CPU, heap e GC não são SLIs. Um serviço a 95% de CPU pode estar perfeito; um a 10% pode estar fora do ar. SLI mede a experiência do usuário; CPU é causa, não sintoma.
 
 ### Os SLOs documentados
 
@@ -147,7 +147,7 @@ O stack local do projeto implementa regras mais simples e legíveis:
 
 $L = \lambda W$: requisições em andamento = taxa × tempo.
 
-Com 60 pedidos/s e 100 ms por chamada, ~6 threads esperam. Com 3 s por chamada, ~180 threads — quase todo o pool de 200 do Tomcat. Rotas não relacionadas passam a falhar por falta de thread. É exatamente o cenário que os padrões abaixo interrompem.
+Com 60 pedidos/s e 100 ms por chamada, ~6 threads esperam. Com 3 s por chamada, ~180 threads — quase todo o pool de 200 do Tomcat. Rotas não relacionadas passam a falhar por falta de thread. É o cenário que os padrões abaixo interrompem.
 
 ```mermaid
 sequenceDiagram
@@ -213,7 +213,7 @@ Estados: **Closed** (passa) → **Open** (falha rápido) → **Half-open** (test
 | espera Open | 10–60 s | Tempo de recuperação |
 | testes Half-open | 3–5 | Cautela |
 
-O detalhe que cai em prova: o limiar de chamada lenta deve ser **menor** que o read timeout; caso contrário, o breaker nunca vê uma chamada "lenta" (ela vira timeout). E o fallback fica na camada **externa** ao retry, senão cada tentativa executa o fallback.
+Um detalhe importante: o limiar de chamada lenta deve ser **menor** que o read timeout; caso contrário, o breaker nunca vê uma chamada "lenta" (ela vira timeout). E o fallback fica na camada **externa** ao retry, senão cada tentativa executa o fallback.
 
 ### Bulkhead
 
@@ -290,7 +290,7 @@ flowchart TB
     alerta --> runbook[Runbook: checar dependência, cache, breaker]
 ```
 
-O que **não** deve acontecer: retry infinito, threads presas, fallback que devolve total inventado, 200 com dado errado. A regra do projeto é falhar explicitamente.
+O que não deve acontecer: retry infinito, threads presas, fallback que devolve total inventado, 200 com dado errado. A regra do projeto é falhar explicitamente.
 
 ---
 

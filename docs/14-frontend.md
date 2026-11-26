@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Três aplicações Next.js independentes, **exportadas como estáticas**, servidas por um único domínio com caminhos diferentes. Sem servidor Next.js em produção, sem BFF, sem sessão no frontend. Esse conjunto de decisões é uma aula de trade-off entre simplicidade operacional e o que você abre mão (SSR, sessão no servidor, segredos no cliente).
+Três aplicações Next.js independentes são exportadas como estáticas e servidas no mesmo domínio, em caminhos diferentes. Não há servidor Next.js em produção, BFF nem sessão no frontend. A simplicidade operacional vem com renúncias: SSR, sessão no servidor e segredos no cliente.
 
 ---
 
@@ -38,7 +38,7 @@ flowchart LR
 | Deploy independente por app | Roteamento por path exige regra de borda |
 
 !!! warning "Variável pública é congelada no build"
-    `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_FARO_URL`, `NEXT_PUBLIC_APP_VERSION` entram no bundle. Mudou? Rebuild e re-sync. E **nunca** coloque segredo em `NEXT_PUBLIC_*`.
+    `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_FARO_URL`, `NEXT_PUBLIC_APP_VERSION` entram no bundle. Mudou? Rebuild e re-sync. E nunca coloque segredo em `NEXT_PUBLIC_*`.
 
 ---
 
@@ -46,7 +46,7 @@ flowchart LR
 
 O CloudFront precisa distinguir `/`, `/store/*` e `/admin/*`. Cada app tem `basePath` fixo e assets sob seu prefixo.
 
-O detalhe que vale ouro na prova: os três apps reescrevem rotas desconhecidas para `/index.html`. Sem distinguir a origem, o CloudFront serviria **o mesmo cache entry** para os três. A solução foi uma **CloudFront Function** que:
+Um detalhe importante: os três apps reescrevem rotas desconhecidas para `/index.html`. Sem distinguir a origem, o CloudFront serviria **o mesmo cache entry** para os três. A solução foi uma **CloudFront Function** que:
 
 1. remove o prefixo `/api` antes de encaminhar ao NLB;
 2. adiciona o header `x-site` (`landing`, `store`, `admin`);
@@ -69,7 +69,7 @@ function handler(event) {
 ```
 
 !!! tip "Lição de arquitetura"
-    Cache key é parte do contrato. Um header que não entra na chave é invisível para o cache; um que entra divide o cache. O bug "todo mundo vê o primeiro site" é um exemplo perfeito de **estado compartilhado acidental** na borda.
+    Cache key é parte do contrato. Um header que não entra na chave é invisível para o cache; um que entra divide o cache. O bug "todo mundo vê o primeiro site" é um caso claro de **estado compartilhado acidental** na borda.
 
 ### API e CORS
 
@@ -94,7 +94,7 @@ O navegador chama `/api/*` na mesma origem, então **não há CORS** no caminho 
 | `Path` | `/api` | Escopo mínimo |
 | `Secure` | sim (exceto HTTP local) | Só TLS |
 
-O Gateway troca cookie por `Authorization: Bearer` internamente. Clientes de API com Bearer continuam funcionando. O frontend **nunca** vê o JWT.
+O Gateway troca cookie por `Authorization: Bearer` internamente. Clientes de API com Bearer continuam funcionando. O frontend nunca vê o JWT.
 
 !!! warning "CSRF não é opcional com cookie"
     O navegador envia o cookie automaticamente em qualquer site que faça a requisição. Sem token CSRF e `SameSite`, uma página maliciosa pode criar pedidos em nome do usuário. Toda mutação busca o token primeiro.
@@ -116,7 +116,7 @@ O route guard do admin **não é segurança**: é UX. A autorização real acont
 | Perfil | autenticado | Account `/accounts/me` |
 
 !!! danger "Nunca confie no cliente"
-    Esconder um botão não é autorização. A prova pode pedir exatamente essa distinção: **UI guard = apresentação; policy = backend**.
+    Esconder um botão não é autorização. Vale manter essa distinção: **UI guard = apresentação; policy = backend**.
 
 ---
 
@@ -132,7 +132,7 @@ O route guard do admin **não é segurança**: é UX. A autorização real acont
 | Busca | local no array | Catálogo pequeno; sem endpoint de busca |
 | Paginação | local, 10 linhas | Sem contrato de paginação no backend |
 
-**Carrinho:** guarda apenas IDs e quantidades positivas. No checkout, o Order recebe IDs/quantidades e calcula o preço autoritativo. O carrinho **não** é fonte de preço. Se a resposta do pedido é incerta, a UI orienta olhar o histórico antes de repetir — porque não há chave de idempotência.
+**Carrinho:** guarda apenas IDs e quantidades positivas. No checkout, o Order recebe IDs/quantidades e calcula o preço autoritativo. O carrinho não é fonte de preço. Se a resposta do pedido é incerta, a UI orienta olhar o histórico antes de repetir — porque não há chave de idempotência.
 
 !!! warning "Carrinho local não é checkout offline"
     O PWA é **online-only**: não há service worker, cache de resposta privada nem replay de escrita. O carrinho sobrevive ao reload, mas o pedido exige rede e sessão. Colocar dados privados em cache de service worker seria um risco de segurança.
@@ -144,7 +144,7 @@ O route guard do admin **não é segurança**: é UX. A autorização real acont
 | Item | Decisão |
 | --- | --- |
 | Manifest | `/store/manifest.webmanifest`, start/scope `/store/` |
-| Service worker | **Não** |
+| Service worker | Não |
 | Instalação | Ação do navegador; sem botão enganoso |
 | Faro | Inicializa se `NEXT_PUBLIC_ENABLE_TELEMETRY=true` e URL existe |
 | Umami | Script oficial, após interactive; eventos demo |

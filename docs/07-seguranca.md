@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Segurança não é uma camada: é uma **propriedade do caminho inteiro**. A pergunta certa não é "temos JWT?", mas *"se este pod for comprometido, o que o atacante consegue alcançar, ler e falsificar?"*.
+Segurança não se resolve em uma camada. O que importa é o caminho inteiro: quem entra, o que pode fazer e o que acontece se um componente for comprometido. Em vez de perguntar apenas "temos JWT?", vale perguntar o que um atacante conseguiria alcançar, ler e falsificar a partir de um pod invadido.
 
 ---
 
@@ -24,7 +24,7 @@ Segurança não é uma camada: é uma **propriedade do caminho inteiro**. A perg
 | **Claim** | Afirmação dentro do token (`sub`, `roles`, `exp`) |
 
 !!! warning "O erro nº 1 de APIs"
-    **Broken Object Level Authorization (OWASP API Security #1)**: o endpoint está autenticado, mas devolve o objeto de outra pessoa. O Gateway sabe que é a conta 42; só o Order sabe se o pedido 123 pertence à conta 42. Autenticar na borda **não** autoriza o objeto.
+    **Broken Object Level Authorization (OWASP API Security #1)**: o endpoint está autenticado, mas devolve o objeto de outra pessoa. O Gateway sabe que é a conta 42; só o Order sabe se o pedido 123 pertence à conta 42. Autenticar na borda não autoriza o objeto.
 
 ---
 
@@ -265,7 +265,7 @@ Qualquer um com `get secrets` no namespace (ou que possa criar um pod que o mont
 | S3 (Product) | IRSA | Role por service account; bucket privado |
 
 !!! warning "O `.env` de desenvolvimento não é deployável"
-    A documentação avisa: `POSTGRES_PASSWORD`, `JWT_SECRET` e `INTERNAL_SERVICE_SECRET` precisam ser trocados antes de expor a stack. O admin local (`1berto52`) é conhecimento público e **nunca** deve existir em MicroK8s/EKS.
+    A documentação avisa: `POSTGRES_PASSWORD`, `JWT_SECRET` e `INTERNAL_SERVICE_SECRET` precisam ser trocados antes de expor a stack. O admin local (`1berto52`) é conhecimento público e nunca deve existir em MicroK8s/EKS.
 
 ---
 
@@ -282,7 +282,7 @@ Qualquer um com `get secrets` no namespace (ou que possa criar um pod que o mont
 | Segredos | Vazamento | Secret + IRSA + OIDC | ✅ (rotação manual) |
 | Pipeline | Dependência vulnerável | CodeQL, Dependabot, secret scanning | ✅ |
 
-!!! quote "A resposta madura"
+!!! quote "Resposta possível"
     "Não temos mTLS entre serviços; confiamos na rede do cluster e no header de identidade do Gateway. Isso é uma simplificação consciente. O próximo passo é service mesh ou NetworkPolicy default-deny + autorização por service account — e o projeto já documenta essa lacuna."
 
 ---

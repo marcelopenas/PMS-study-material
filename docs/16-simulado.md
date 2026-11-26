@@ -84,7 +84,7 @@ Feche as outras abas. Responda primeiro, confira depois. As questões de múltip
     <li data-key="a">Custo e performance.</li>
     <li data-key="b">Segurança e usabilidade.</li>
     <li data-key="c">Consistência ACID e BASE.</li>
-    <li data-key="d">Latência e consistência quando **não** há partição.</li>
+    <li data-key="d">Latência e consistência quando não há partição.</li>
   </ul>
   <p class="explain">Else (E): na operação normal, replicar de forma síncrona aumenta consistência e latência; assíncrona faz o contrário. Uma réplica de leitura é EL.</p>
 </div>

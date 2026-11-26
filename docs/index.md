@@ -1,7 +1,7 @@
 # Do código à prova
 
-!!! quote "A pergunta que a prova faz"
-    Não é "o que é Kubernetes?". É **"por que este sistema foi construído assim, o que isso resolve, quanto custa e o que acontece quando uma peça falha?"**. Este material treina essa resposta usando um sistema real: a plataforma **Microsserv52**.
+!!! quote "O que este guia tenta responder"
+    A pergunta que organiza o estudo não é "o que é Kubernetes?", mas por que um sistema foi construído de uma certa forma, o que essa escolha resolve, quanto custa e o que acontece quando uma peça falha. O caso usado é a plataforma Microsserv52.
 
 Este guia nasce de duas fontes:
 
@@ -26,7 +26,7 @@ A regra editorial é simples: **toda afirmação sobre o projeto tem evidência 
 
 </div>
 
-!!! tip "A prova é sobre trade-offs, não sobre definições"
+!!! tip "O foco são trade-offs, não definições"
     O material da disciplina é explícito: você deve **comparar** estilos, **justificar** quando dividir, **calcular** o custo de uma cadeia síncrona e **escolher** entre sincronismo e eventos. Nenhuma dessas habilidades se treina decorando. Por isso cada capítulo termina com *"como responder"* e não apenas com um resumo.
 
 !!! warning "Avaliação oral"
@@ -77,12 +77,12 @@ flowchart LR
 | Observabilidade | Prometheus + Mimir + Loki + Tempo + Pyroscope + Grafana + Alloy | 8 dashboards, 5 probes sintéticas |
 | Custo | ≈ US$ 240/mês em dois nós | orçamento configurado em US$ 150 |
 
-!!! note "A frase que resume o projeto"
+!!! note "Resumo do projeto"
     É uma arquitetura de microsserviços **síncrona**, com banco compartilhado por servidor e tabelas separadas por serviço (propriedade por convenção), implantada em Kubernetes gerenciado, observada por uma stack LGTM auto-hospedada e validada por testes de carga que encontraram o gargalo real: **o máximo do HPA do Product e a CPU dos nós — não o banco**.
 
 ---
 
-## As 10 ideias que respondem 80% da prova
+## Dez ideias que sustentam a maior parte das respostas
 
 <div class="study-card" markdown="1">
 
@@ -130,7 +130,7 @@ Responda sem consultar. O placar aparece logo acima do primeiro quiz; recarregar
 </div>
 
 <div class="study-quiz" data-answer="a">
-  <p class="q">3. Por que a liveness probe **não** deve consultar o banco de dados?</p>
+  <p class="q">3. Por que a liveness probe não deve consultar o banco de dados?</p>
   <ul class="options">
     <li data-key="a">Porque uma oscilação do banco faria o Kubernetes reiniciar todas as réplicas ao mesmo tempo.</li>
     <li data-key="b">Porque o banco não suporta conexões de health check.</li>
@@ -193,4 +193,4 @@ Marque o que você já consegue explicar **sem olhar**. O progresso fica salvo n
 </div>
 
 !!! info "Sobre a fidelidade do material"
-    Números de carga, custo, SLO e topologia vêm dos docs do projeto e valem para a fotografia documentada (novembro de 2026). O material também marca o que é **meta** e o que é **medição** — uma distinção que a banca costuma cobrar.
+    Números de carga, custo, SLO e topologia vêm dos docs do projeto e valem para a fotografia documentada (novembro de 2026). O material também marca o que é **meta** e o que é **medição** — uma distinção que vale manter clara.

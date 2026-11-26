@@ -2,14 +2,14 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Este capítulo existe para você não estudar 18 capítulos como se fossem independentes. A disciplina inteira cabe em **quatro perguntas**:
+Os capítulos podem ser lidos em qualquer ordem, mas a disciplina fica mais fácil quando você enxerga quatro perguntas por trás deles:
 
-1. **Como dividir?** — domínio, fronteiras, contratos (microsserviços, DDD, APIs).
-2. **Como fazer rodar?** — containers, orquestração, nuvem, deploy, custo (Docker, Kubernetes, AWS, Terraform).
-3. **Como não cair?** — disponibilidade, resiliência, segurança, consistência (CAP, padrões, Zero Trust, eventos).
-4. **Como saber o que está acontecendo?** — SLI/SLO, métricas, logs, traces, alertas (observabilidade, performance).
+1. Como dividir: domínio, fronteiras e contratos (microsserviços, DDD, APIs).
+2. Como fazer rodar: containers, orquestração, nuvem, deploy e custo (Docker, Kubernetes, AWS, Terraform).
+3. Como não cair: disponibilidade, resiliência, segurança e consistência (CAP, padrões, Zero Trust, eventos).
+4. Como saber o que está acontecendo: SLI/SLO, métricas, logs, traces e alertas (observabilidade, performance).
 
-O projeto é a prova de que as quatro se conectam: a mesma decisão (ex.: *um gateway público*) aparece nas quatro.
+O projeto mostra que as quatro se conectam: a mesma decisão (por exemplo, um gateway público) aparece nas quatro.
 
 ---
 
@@ -51,7 +51,7 @@ O projeto é a prova de que as quatro se conectam: a mesma decisão (ex.: *um ga
 | Projeto | [enunciado](https://insper.github.io/platform/2026.2/exercises/project/) |
 
 !!! note "O que a ementa cobra de verdade"
-    Os objetivos de aprendizagem das aulas usam verbos como **comparar**, **justificar**, **escolher**, **calcular** e **estimar**. A prova não premia quem lista componentes; premia quem explica o custo de cada escolha.
+    Os objetivos de aprendizagem das aulas usam verbos como **comparar**, **justificar**, **escolher**, **calcular** e **estimar**. Listar componentes não basta; o que conta é explicar o custo de cada escolha.
 
 ---
 
@@ -109,7 +109,7 @@ Cada seta é uma dependência real: não dá para observar o que não foi instru
 
 ## Linha do tempo do projeto (o "como foi desenvolvido")
 
-O repositório tem 126 commits e a documentação registra a evolução. A sequência abaixo é a história que a banca pode pedir:
+O repositório tem 126 commits e a documentação registra a evolução. A sequência abaixo resume a evolução do trabalho:
 
 ```mermaid
 timeline
@@ -128,16 +128,16 @@ timeline
 | Operação | Prometheus/LGTM, 8 dashboards, alertas, k6 | Logs de verificação de 21/11 |
 | Entrega | Docs Zensical no GitHub Pages, limitações explícitas | `docs.yml`, site publicado |
 
-!!! warning "O que a documentação **não** afirma"
-    Não há Kafka, não há Cart service, não há cache em uso, não há domínio customizado, não há teste de carga autenticado em AWS e o deploy é manual. A documentação trata isso como **escopo**, não como esquecimento — e você deve fazer o mesmo na prova. Cada lacuna, com benefício, motivo e caminho de adoção, está em [O que não foi implementado](18-lacunas-e-evolucao.md).
+!!! warning "O que a documentação não afirma"
+    Não há Kafka, não há Cart service, não há cache em uso, não há domínio customizado, não há teste de carga autenticado em AWS e o deploy é manual. A documentação trata isso como escopo, não como esquecimento. A mesma postura vale ao explicar o projeto. Cada lacuna, com benefício, motivo e caminho de adoção, está em [O que não foi implementado](18-lacunas-e-evolucao.md).
 
 ---
 
-## Os três eixos de trade-off que a banca explora
+## Três trade-offs que organizam o projeto
 
 ### 1. Acoplamento × autonomia
 
-Mais serviços = mais autonomia de deploy e escala, mas **mais chamadas de rede, mais contratos, mais observabilidade e mais custo operacional**. O projeto escolhe seis serviços para um time de 2–3 pessoas: é didático, não é a recomendação para uma startup. A própria aula de deploy diz que EKS nesse tamanho é "passivo", e o projeto assume que usa EKS **para aprender**.
+Mais serviços = mais autonomia de deploy e escala, mas **mais chamadas de rede, mais contratos, mais observabilidade e mais custo operacional**. O projeto escolhe seis serviços para um time de 2–3 pessoas: é didático, não é a recomendação para uma startup. A aula de deploy chama EKS nesse tamanho de passivo; o projeto assume que o usa para aprender.
 
 ### 2. Consistência × disponibilidade × latência
 
@@ -166,7 +166,7 @@ EKS, NAT, NLB, RDS e ElastiCache cobram por hora, mesmo sem tráfego: ≈ US$ 17
 
 ---
 
-## Como a prova costuma ser corrigida
+## Como uma resposta costuma ser avaliada
 
 | Critério | O que tira nota | O que ganha nota |
 | --- | --- | --- |
@@ -177,4 +177,4 @@ EKS, NAT, NLB, RDS e ElastiCache cobram por hora, mesmo sem tráfego: ≈ US$ 17
 | Limites | Esconder lacunas | "Não medimos falha do provedor; o próximo passo é X" |
 
 !!! quote "Se levar uma frase"
-    **Arquitetura é o conjunto de decisões que você não consegue desfazer barato.** A prova pede que você mostre quais decisões foram caras no projeto, por que foram tomadas e o que você faria diferente com outra restrição.
+    **Arquitetura é o conjunto de decisões que você não consegue desfazer barato.** O que importa é mostrar quais decisões foram caras, por que foram tomadas e o que mudaria com outra restrição.

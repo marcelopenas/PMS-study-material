@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-A rede não é confiável, o tempo não é global e as falhas são parciais. Essas três frases explicam por que um sistema distribuído é qualitativamente diferente de um programa em uma máquina — e por que quase todo padrão deste guia existe.
+Em um sistema distribuído, a rede falha, o tempo não é compartilhado e uma parte do sistema pode estar quebrada enquanto outra funciona. Quase todos os padrões deste guia existem para lidar com isso.
 
 !!! quote "Definição de trabalho"
     Um sistema distribuído é um conjunto de computadores independentes que se apresenta ao usuário como um sistema coerente. O preço é que **falhas parciais** passam a ser a regra, e não a exceção.
@@ -16,7 +16,7 @@ A rede não é confiável, o tempo não é global e as falhas são parciais. Ess
 | A rede é confiável | Pacotes se perdem, conexões caem | Timeout no Feign, retry limitado |
 | A latência é zero | Chamadas custam ms a segundos | Order → Product alonga o checkout; Order → Exchange está previsto |
 | A banda é infinita | Payloads e imagens custam | Limite de 5 MiB por imagem; paginação ausente no catálogo |
-| A rede é segura | Tráfego interno pode ser interceptado | TLS na borda; mTLS interno **não** implementado |
+| A rede é segura | Tráfego interno pode ser interceptado | TLS na borda; mTLS interno não implementado |
 | A topologia não muda | Pods nascem e morrem com IPs novos | Descoberta via Service/DNS do Kubernetes |
 | Há um administrador | Múltiplas contas, times e permissões | IRSA, OIDC, RBAC, Secrets |
 | O custo de transporte é zero | NAT, egress, NLB cobram | ≈ US$ 39 de NAT + ≈ US$ 28 de NLB por mês |
@@ -59,7 +59,7 @@ O teorema diz: em um sistema que **replica dados**, durante uma **partição de 
 | **A** | Todo nó não falho responde, mesmo com dado velho | "O sistema está no ar" |
 | **P** | O sistema continua apesar de partições | Algo opcional |
 
-**P não é escolha.** Partições acontecem. A escolha real é **C ou A durante a partição**.
+Partições acontecem; P não é uma opção que se descarta. A escolha real é entre C e A enquanto elas duram.
 
 ### CP × AP na prática
 
@@ -84,9 +84,9 @@ flowchart LR
 Na ausência de partição, a escolha é **latência × consistência**. Réplica de leitura assíncrona = EL: leitura rápida, possivelmente defasada. Réplica síncrona = EC: commit espera, mais lento.
 
 !!! example "O cache é uma decisão AP"
-    O Redis provisionado no projeto (mesmo desligado) seria AP: um valor em cache pode estar velho até o TTL. Se um preço muda no Product, um catálogo cacheado pode mostrar o valor antigo por até `CACHE_TTL_SECONDS`. Isso é aceitável para catálogo; **não** seria para saldo ou autorização.
+    O Redis provisionado no projeto (mesmo desligado) seria AP: um valor em cache pode estar velho até o TTL. Se um preço muda no Product, um catálogo cacheado pode mostrar o valor antigo por até `CACHE_TTL_SECONDS`. Isso é aceitável para catálogo; não seria para saldo ou autorização.
 
-### Decisão por tipo de dado (tabela de ouro)
+### Decisão por tipo de dado
 
 | Dado do projeto | Classe desejável | Por quê |
 | --- | --- | --- |
@@ -98,7 +98,7 @@ Na ausência de partição, a escolha é **latência × consistência**. Réplic
 | Total do pedido | CP no momento do checkout | Precisa do preço consistente com o catálogo lido |
 
 !!! warning "Cuidado com a resposta fácil"
-    "Escolhemos CA" é quase sempre uma resposta errada para sistemas replicados. E "usamos Cassandra porque é AP" ignora que o modo de leitura/escrita (quórum) muda o comportamento. A pergunta certa é: **o que acontece com as *minhas* requisições durante uma partição?**
+    "Escolhemos CA" é quase sempre uma resposta errada para sistemas replicados. Dizer "usamos Cassandra porque é AP" ignora que o modo de leitura e escrita (quórum) muda o comportamento. A pergunta útil é outra: o que acontece com as minhas requisições durante uma partição?
 
 ---
 
@@ -131,7 +131,7 @@ sequenceDiagram
 
 ---
 
-## 5. Disponibilidade: a conta que a prova pede
+## 5. Disponibilidade: a conta que importa
 
 $$A = \frac{MTTF}{MTTF + MTTR}$$
 
@@ -150,7 +150,7 @@ $$A_{série} = a_1 \times a_2 \times \cdots \times a_n$$
 
 $$A_{paralelo} = 1 - (1-a)^n$$
 
-!!! example "A conta do projeto"
+!!! example "Exemplo com os números do projeto"
     Suponha Gateway 99,9% (duas réplicas, mas o serviço é um só), Order 99,9% e Product 99,9%. O caminho de leitura é:
 
     $$0{,}999^3 \approx 0{,}997 \Rightarrow 99{,}7\%$$
@@ -189,7 +189,7 @@ Cache troca **frescor** por **latência e carga**. É uma decisão AP: o valor p
     Leitor A dá miss, lê o banco (valor antigo). Escritor B atualiza o banco e invalida o cache. A grava o valor antigo no cache. Resultado: cache velho por um TTL inteiro. Mitigações: invalidar **depois** do commit, usar versão/`updated_at` na chave, ou atrasar a escrita do cache (double delete). Não existe bala de prata — só trade-off.
 
 !!! note "No projeto"
-    O Redis está provisionado como endpoint compartilhado, mas **`CACHE_ENABLED=false`** e não há lógica de cache por serviço; o TTL configurado é 60 s. Um cache local por JVM (sem Redis) divergiria entre réplicas — exatamente o problema que o cache distribuído resolve. O dashboard **Dependencies** e o alerta de erro de cache existem, mas o cache não está ativo. Na prova: "cache previsto, desligado por escopo; se ligar, precisa de invalidação e métrica de hit ratio".
+    O Redis está provisionado como endpoint compartilhado, mas **`CACHE_ENABLED=false`** e não há lógica de cache por serviço; o TTL configurado é 60 s. Um cache local por JVM (sem Redis) divergiria entre réplicas, o problema que o cache distribuído resolve. O dashboard **Dependencies** e o alerta de erro de cache existem, mas o cache não está ativo. Resumindo: cache previsto, desligado por escopo; se for ligado, precisa de invalidação e métrica de hit ratio.
 
 ---
 
@@ -252,10 +252,10 @@ Cada pod abre um pool (Hikari). O banco tem um limite global (`max_connections`)
 
 $$pool \le \frac{max\_connections}{serviços \times réplicas}$$
 
-**PgBouncer** (ou um proxy equivalente) multiplexa conexões e permite muitos pods com poucas conexões reais ao banco. O custo é mais um componente e um modo de pooling (transaction pooling quebra recursos de sessão). O projeto **não** usa PgBouncer; por isso o pool é a alavanca.
+**PgBouncer** (ou um proxy equivalente) multiplexa conexões e permite muitos pods com poucas conexões reais ao banco. O custo é mais um componente e um modo de pooling (transaction pooling quebra recursos de sessão). O projeto não usa PgBouncer; por isso o pool é a alavanca.
 
 !!! note "No projeto"
-    RDS `db.t4g.micro` Single-AZ, 112 conexões, sem réplica de leitura; pool de 8 por pod; RTO 1 h/RPO 5 min via PITR. O teste de carga mostrou que o banco **não** era o gargalo a 300 req/s (52/112, CPU ~15%), mas o pior caso de 3 serviços × 6 réplicas × 8 = 144 estouraria. Multi-AZ reduziria o RTO; uma réplica de leitura exigiria roteamento e tolerância a lag — e o cache desligado manda toda leitura ao primário.
+    RDS `db.t4g.micro` Single-AZ, 112 conexões, sem réplica de leitura; pool de 8 por pod; RTO 1 h/RPO 5 min via PITR. O teste de carga mostrou que o banco não era o gargalo a 300 req/s (52/112, CPU ~15%), mas o pior caso de 3 serviços × 6 réplicas × 8 = 144 estouraria. Multi-AZ reduziria o RTO; uma réplica de leitura exigiria roteamento e tolerância a lag — e o cache desligado manda toda leitura ao primário.
 
 ---
 
@@ -298,8 +298,8 @@ No projeto, o CloudFront termina o TLS e reescreve `/api`; o NLB é L4 e só ace
 
 | Decisão | Leitura correta |
 | --- | --- |
-| RDS Single-AZ | **Não** é HA. Um failover de AZ pode causar indisponibilidade; o RTO/RPO documentados são 1 h / 5 min, não zero. |
-| Réplicas stateless atrás de Service | A disponibilidade do serviço aumenta, mas a do **banco** não muda. O elo mais fraco manda. |
+| RDS Single-AZ | Não é HA. Um failover de AZ pode causar indisponibilidade; o RTO/RPO documentados são 1 h / 5 min, não zero. |
+| Réplicas stateless atrás de Service | A disponibilidade do serviço aumenta, mas a do banco não muda. O elo mais fraco manda. |
 | JWT validado localmente pelo Gateway | Escolha CP-ish: token revogado só deixa de valer no vencimento (900 s), a menos que haja introspecção. Trade-off latência × revogação. |
 | Cache desligado | Evita o problema de consistência do cache; perde a redução de latência. É uma decisão consciente. |
 | Sem eventos | Evita consistência eventual e outbox; concentra tudo no request path. Mais simples, menos resiliente. |

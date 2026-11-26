@@ -2,9 +2,9 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-A pergunta central não é "quantos serviços?". É **"onde cortar para que os pedaços possam mudar sem se arrastar?"**. DDD responde *onde*; a arquitetura de microsserviços responde *como operar* cada pedaço.
+Antes de escolher quantos serviços criar, é preciso decidir onde cortar. DDD ajuda a encontrar essas fronteiras; a arquitetura de microsserviços define como operar cada pedaço.
 
-!!! quote "A definição que vale citar"
+!!! quote "Definição"
     Microsserviços é um estilo arquitetural que organiza a aplicação como uma coleção de serviços pequenos, autônomos, modelados em torno de uma capacidade de negócio, implantáveis de forma independente e comunicando-se por contratos explícitos.
 
 ---
@@ -28,7 +28,7 @@ A pergunta central não é "quantos serviços?". É **"onde cortar para que os p
     - Uma requisição dispara uma cadeia síncrona longa; qualquer elo derruba tudo.
     - Uma biblioteca de domínio compartilhada força todos a atualizar juntos.
 
-    O projeto **não** é um monólito distribuído no papel: cada serviço tem tabelas próprias e contrato. Mas a cadeia síncrona Order → Product (e futuramente Exchange) é um risco real — e é por isso que ela aparece nos testes de carga e nas limitações.
+    O projeto não é um monólito distribuído no papel: cada serviço tem tabelas próprias e contrato. Mas a cadeia síncrona Order → Product (e futuramente Exchange) é um risco real — e é por isso que ela aparece nos testes de carga e nas limitações.
 
 ### Lei de Conway
 
@@ -109,10 +109,10 @@ flowchart LR
 | Servidor/base compartilhados | Custo menor, **limite de conexões compartilhado** |
 
 !!! warning "Propriedade sem isolamento físico"
-    Como não há schema ou credencial separada, **nada no banco impede** um `SELECT` na tabela alheia. A garantia é revisão de código, contrato e disciplina — não um mecanismo de infraestrutura. Na prova, diga que `database-per-service` é um **espectro**: o projeto fica no polo "tabelas separadas por convenção", não no polo "base e role por serviço". É uma limitação honesta, e o próximo passo é schema + role por serviço.
+    Como não há schema ou credencial separada, **nada no banco impede** um `SELECT` na tabela alheia. A garantia é revisão de código, contrato e disciplina — não um mecanismo de infraestrutura. Ao explicar, diga que `database-per-service` é um **espectro**: o projeto fica no polo "tabelas separadas por convenção", não no polo "base e role por serviço". É uma limitação honesta, e o próximo passo é schema + role por serviço.
 
 !!! warning "O limite que o compartilhamento cobra"
-    `db.t4g.micro` permite 112 conexões. Com três serviços de banco e pool de 10 por pod, o teto é $112 / (3 \times 10) \approx 3{,}7$ réplicas por serviço. Na quarta réplica, o banco recusa conexões — foi exatamente o que derrubou dois pods de Product no teste com pool 10.
+    `db.t4g.micro` permite 112 conexões. Com três serviços de banco e pool de 10 por pod, o teto é $112 / (3 \times 10) \approx 3{,}7$ réplicas por serviço. Na quarta réplica, o banco recusa conexões — foi o que derrubou dois pods de Product no teste com pool 10.
 
 ---
 
@@ -161,7 +161,7 @@ flowchart LR
 ```
 
 !!! tip "ACL é o padrão mais subestimado"
-    O Exchange é o único serviço Python. Ele **não deixa** o formato do provedor (campos, datas, rates) vazar para o Order. Se o provedor mudar ou for trocado, só o adapter muda. Em uma prova, cite isso como exemplo de fronteira que protege o domínio de uma dependência volátil.
+    O Exchange é o único serviço Python. Ele **não deixa** o formato do provedor (campos, datas, rates) vazar para o Order. Se o provedor mudar ou for trocado, só o adapter muda. Vale citar isso como exemplo de fronteira que protege o domínio de uma dependência volátil.
 
 ---
 
@@ -203,7 +203,7 @@ Event Storming é colaborativo e revela fronteiras que o banco de dados esconde.
 
 ---
 
-## 8. Erros comuns (e como a banca os usa)
+## 8. Erros comuns
 
 | Erro | Correção |
 | --- | --- |
@@ -223,13 +223,13 @@ Event Storming é colaborativo e revela fronteiras que o banco de dados esconde.
 ## 9. Como responder
 
 **"Como vocês decidiram os serviços?"**
-> Por capacidade de negócio e contexto: catálogo, pedido, câmbio, identidade, contas e borda. A prova de que a fronteira está certa é que cada um tem tabelas próprias e pode ser implantado sozinho. O contraexemplo seria um serviço por tabela (`order_item`), que não teria comportamento nem deploy independente.
+> Por capacidade de negócio e contexto: catálogo, pedido, câmbio, identidade, contas e borda. A evidência de que a fronteira está certa é que cada um tem tabelas próprias e pode ser implantado sozinho. O contraexemplo seria um serviço por tabela (`order_item`), que não teria comportamento nem deploy independente.
 
 **"Por que não juntar Product e Order?"**
 > Porque têm ciclos de mudança e escalas diferentes: catálogo é leitura intensiva e pública; pedido é escrita autenticada e depende de preço. Juntar reduziria uma chamada de rede, mas acoplaria o deploy e a escala dos dois — e o preço praticado no pedido precisa ser congelado de qualquer forma.
 
 **"O que é monolito distribuído e o projeto é um?"**
-> É um sistema com muitos processos, mas acoplamento de monólito: deploy conjunto, tabelas compartilhadas, cadeia síncrona longa. O projeto tem uma cadeia curta (Order → Product; Exchange previsto) e contratos, então não é; mas o risco de a cadeia crescer é real, e a resposta é evento/outbox.
+> É um sistema com muitos processos, mas acoplamento de monólito: deploy conjunto, tabelas compartilhadas, cadeia síncrona longa. O projeto tem uma cadeia curta (Order → Product; Exchange previsto) e contratos, então não é; mas o risco de a cadeia crescer é real, e o caminho é evento/outbox.
 
 ---
 

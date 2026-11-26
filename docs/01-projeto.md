@@ -2,7 +2,7 @@
 
 <span class="study-tag prova">prova</span><span class="study-tag projeto">projeto</span>
 
-Se a disciplina ensina os conceitos, o projeto mostra **o preço de aplicá-los**. Este capítulo é a visão de raio X: o que o sistema faz, como o repositório é organizado, como o time trabalhou, o que a arquitetura resolve e — igualmente importante — o que ela apenas **desloca** para outro lugar.
+A disciplina apresenta os conceitos; o projeto mostra quanto eles custam na prática. Este capítulo descreve o sistema, o repositório, o processo de trabalho e as decisões que moldaram o resultado. Também aponta o que a arquitetura resolve e o que ela apenas desloca para outro lugar.
 
 !!! info "Escopo em uma frase"
     Loja demonstrativa em que visitantes navegam pelo catálogo e usuários autenticados criam pedidos persistidos. **Não há pagamento real, transação financeira, estoque ou envio.** O valor está na engenharia de integração, deploy e operação.
@@ -23,9 +23,9 @@ O projeto segue o exercício de 2026.2: integrar os serviços individuais (Produ
 | **Exchange** | Câmbio e adaptação do provedor | — (cache curto) | provedor externo |
 
 !!! warning "Contrato × implementação: a conversão de moeda"
-    O contrato do exercício prevê `GET /orders/{id}?currency=BRL` chamando o **Exchange**. Porém a implementação checada do Order responde **422** para qualquer moeda diferente de USD ("Currency conversion is unavailable"), e o frontend opera apenas em USD. O Exchange existe, isola o provedor e expõe `/exchanges/{from}/{to}`; o que falta é a chamada fim a fim no Order. Na prova, diga **"capacidade prevista, integração pendente"** — não afirme que a conversão está funcionando. É o exemplo perfeito de por que a documentação separa estado atual de contrato.
+    O contrato do exercício prevê `GET /orders/{id}?currency=BRL` chamando o **Exchange**. Porém a implementação checada do Order responde **422** para qualquer moeda diferente de USD ("Currency conversion is unavailable"), e o frontend opera apenas em USD. O Exchange existe, isola o provedor e expõe `/exchanges/{from}/{to}`; o que falta é a chamada fim a fim no Order. Ao explicar, diga "capacidade prevista, integração pendente"; não afirme que a conversão está funcionando. Esse é um caso claro de por que a documentação separa estado atual de contrato.
 
-Regras de domínio que a prova adora:
+Regras de domínio que aparecem no projeto:
 
 - **Order não aceita preço do cliente.** Ele lê o preço atual do Product no momento do checkout.
 - **Order armazena em USD**; o contrato prevê converter via Exchange quando o cliente pede outra moeda, mas a implementação checada ainda rejeita não-USD (ver aviso abaixo).
@@ -34,7 +34,7 @@ Regras de domínio que a prova adora:
 - **Product é a autoridade do catálogo**, mas o pedido guarda o preço praticado no item (`total`), porque o preço de amanhã não pode reescrever o pedido de ontem.
 
 !!! tip "Por que isso é DDD, não só organização"
-    O item do pedido guarda `productId` + quantidade + total, e não um objeto `Product` inteiro. É exatamente a regra de agregados: **referencie outros agregados pela identidade** e congele o que o negócio precisa preservar. No contexto de Catálogo, "produto" tem preço mutável; no contexto de Pedido, tem preço praticado.
+    O item do pedido guarda `productId` + quantidade + total, e não um objeto `Product` inteiro. É a regra de agregados: **referencie outros agregados pela identidade** e congele o que o negócio precisa preservar. No contexto de Catálogo, "produto" tem preço mutável; no contexto de Pedido, tem preço praticado.
 
 ---
 
@@ -79,9 +79,9 @@ flowchart LR
 | CloudFront (`/`, `/store/`, `/admin/`, `/media/*`) | Sim | É a borda: TLS, cache, OAC para buckets privados |
 | `/api/*` no CloudFront | Sim | Reescreve para o Gateway; o cliente nunca vê hostnames internos |
 | Gateway | Sim, via NLB/NodePort | Único ponto de aplicação; aplica políticas transversais |
-| Auth, Account, Product, Order, Exchange | **Não** | ClusterIP; alcançáveis só dentro do namespace |
-| RDS, ElastiCache | **Não** | Subnets privadas, sem endpoint público |
-| Grafana/Prometheus/Loki/Tempo | **Não** | ClusterIP; acesso por `kubectl port-forward` ou ALB+Cognito |
+| Auth, Account, Product, Order, Exchange | Não | ClusterIP; alcançáveis só dentro do namespace |
+| RDS, ElastiCache | Não | Subnets privadas, sem endpoint público |
+| Grafana/Prometheus/Loki/Tempo | Não | ClusterIP; acesso por `kubectl port-forward` ou ALB+Cognito |
 
 !!! warning "A fronteira de confiança é o Gateway"
     Se um serviço de negócio ganhasse um `NodePort` ou um Ingress público, qualquer cliente poderia forjar o header de identidade (`id-account`) que o Gateway repassa. O modelo inteiro depende de **só o Gateway ser alcançável** e de ele **sobrescrever** headers de identidade vindos de fora.
@@ -228,7 +228,7 @@ Decisões que valem citar:
 - **Docs no CI.** O site é gerado e publicado automaticamente em `main`.
 
 !!! warning "Isso é CD ou apenas CI?"
-    É **CI completo + deploy manual reproduzível**. A escolha é consciente: menos segredos em CI, operador vê o `terraform plan`, mesmo script serve para recuperação. Na prova, chame de *continuous delivery com aprovação manual*, não de *continuous deployment*.
+    É **CI completo + deploy manual reproduzível**. A escolha é consciente: menos segredos em CI, operador vê o `terraform plan`, mesmo script serve para recuperação. Ao explicar, chame de *continuous delivery com aprovação manual*, não de *continuous deployment*.
 
 ---
 
@@ -250,7 +250,7 @@ O projeto trata assistentes de IA como **ferramenta de engenharia**, não como a
 | "Funciona na minha máquina" | CI + Compose + smoke |
 | Viés de confirmação | Teste que falha primeiro; evidência |
 
-!!! warning "A regra que a banca usa"
+!!! warning "A regra prática"
     Se você não consegue explicar uma linha assistida, ela não é sua. A divulgação não reduz a nota; esconder reduz. O mesmo vale para a prova oral.
 
 ---
@@ -270,17 +270,17 @@ O projeto trata assistentes de IA como **ferramenta de engenharia**, não como a
 | Deploy derruba tudo | RollingUpdate + PDB | Uma réplica sempre disponível durante interrupção voluntária |
 | Credenciais no código | ConfigMap/Secret + IRSA + OIDC | Sem chave de longa duração no Git |
 
-### Desloca (e é aqui que a banca pega)
+### O que a arquitetura desloca
 
 | Bottleneck "resolvido" | Para onde foi |
 | --- | --- |
-| Carga no monólito | Para o **banco**: conexões viram o limite quando há muitas réplicas |
+| Carga no monólito | Para o banco: conexões viram o limite quando há muitas réplicas |
 | Latência de uma chamada | Para a **cadeia síncrona** Order → Product (e Exchange, quando a conversão for ativada) |
 | Complexidade de código | Para a **operação**: K8s, Helm, Terraform, observabilidade, custo fixo |
 | Consistência transacional | Para **eventos/compensações** — que o projeto não implementou |
 | Segurança de perímetro | Para **identidade de workload** — mTLS/NetworkPolicy ainda incompletos |
 
-!!! quote "A frase que vale ouro"
+!!! quote "Em resumo"
     **Microsserviços não eliminam gargalos; eles os tornam visíveis e móveis.** O projeto mediu isso: ao corrigir o pool (10 → 8), o gargalo saiu do RDS e apareceu no teto do HPA do Product e na CPU dos nós.
 
 ---
@@ -289,7 +289,7 @@ O projeto trata assistentes de IA como **ferramenta de engenharia**, não como a
 
 A documentação publicada é organizada por **área de responsabilidade**, não por cronologia. Saber onde cada assunto mora ajuda a responder "onde isso está documentado?" — e mostra que o projeto trata documentação como artefato de engenharia.
 
-| Seção dos docs | O que contém | Por que importa na prova |
+| Seção dos docs | O que contém | Por que importa |
 | --- | --- | --- |
 | [`project/project`](https://microsserv52.github.io/platform/project/project/) | Escopo, capacidades, checklist de entrega | Define o que é "pronto" e o que é mock |
 | [`project/architecture`](https://microsserv52.github.io/platform/project/architecture/) | Contexto, repositórios, runtime, cloud, decisões | Fonte da arquitetura e dos limites |
@@ -308,11 +308,11 @@ A documentação publicada é organizada por **área de responsabilidade**, não
 | [`frontend/*`](https://microsserv52.github.io/platform/frontend/overview/) | Três apps, sessão, PWA, Faro, verificação | Base do capítulo 14 |
 
 !!! tip "Como a documentação se defende"
-    Ela separa **estado atual**, **meta** e **lacuna**. "O SLO é 99,5%" é meta; "Product 6/6, p95 1,25 s" é medição; "falha do provedor não testada" é lacuna. Copie esse hábito na prova: cada afirmação com o seu tipo.
+    Ela separa **estado atual**, **meta** e **lacuna**. "O SLO é 99,5%" é meta; "Product 6/6, p95 1,25 s" é medição; "falha do provedor não testada" é lacuna. Vale manter esse hábito ao explicar: cada afirmação com o seu tipo.
 
 ---
 
-## 9. Limitações declaradas (decore três)
+## 9. Limitações declaradas (conheça três)
 
 | Limitação | Consequência | Próximo passo |
 | --- | --- | --- |
@@ -341,7 +341,7 @@ Perguntas prováveis e o esqueleto da resposta:
 > Porque o objetivo era aprender autonomia de deploy e escala por serviço, e o domínio já tinha fronteiras claras (catálogo, pedido, câmbio, identidade). O custo foi operacional: seis pipelines, service discovery, observabilidade e um banco com limites de conexão. Para um time de 2–3 pessoas e um produto real, eu começaria com um monólito modular.
 
 **"Por que o banco é compartilhado se vocês dizem database-per-service?"**
-> A propriedade é **lógica e por convenção**: cada serviço só consulta as suas tabelas (`accounts`, `products`, `orders`, `order_items`) e obtém dados dos outros por API. Não há isolamento físico — Compose e EKS apontam todos para a mesma base `platform`, no mesmo schema; Product usa Flyway, Account e Order usam JPA. É uma simplificação de custo e uma limitação real: nada no banco impede uma query cruzada, só a disciplina e a revisão. O limite de 112 conexões é a prova de que o compartilhamento cobra preço.
+> A propriedade é **lógica e por convenção**: cada serviço só consulta as suas tabelas (`accounts`, `products`, `orders`, `order_items`) e obtém dados dos outros por API. Não há isolamento físico — Compose e EKS apontam todos para a mesma base `platform`, no mesmo schema; Product usa Flyway, Account e Order usam JPA. É uma simplificação de custo e uma limitação real: nada no banco impede uma query cruzada, só a disciplina e a revisão. O limite de 112 conexões mostra que o compartilhamento cobra preço.
 
 **"Qual foi o gargalo real?"**
 > Na leitura de catálogo a 400 req/s, o pool de 10 estourou os slots do RDS e dois pods de Product entraram em crash-loop. Com pool 5, o gargalo virou Hikari dentro do pod (107 erros 5xx). Com pool 8, zero erros, 299,6 req/s, p95 1,25 s, RDS em 52/112. O teto passou a ser o `maxReplicas: 6` do Product e a CPU dos nós — não o banco.
