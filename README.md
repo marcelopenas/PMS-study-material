@@ -156,6 +156,7 @@ study-material/
 │   ├── 19-respostas.md        # respostas de quizzes, cálculos, ordens e flashcards
 │   ├── javascripts/study.js   # widgets (quiz, ordem, cálculo, flash, progresso)
 │   ├── javascripts/math.js    # KaTeX sob demanda para as fórmulas
+│   ├── javascripts/sidebar.js # recolher índice/navegação (independentes)
 │   ├── stylesheets/extra.css  # estilos dos widgets + diagramas claro/escuro
 │   └── assets/
 │       ├── logo.svg
@@ -163,6 +164,17 @@ study-material/
 │       └── katex/             # CSS/JS/fontes do KaTeX (self-hosted)
 └── site/                      # gerado; não versionar
 ```
+
+---
+
+## Sidebars recolhíveis
+
+O Zensical não tem um feature flag para recolher o índice no desktop (só `toc.follow` e `toc.integrate`). O `docs/javascripts/sidebar.js` adiciona dois controles independentes:
+
+- **Índice** (direita): recolhe só a lista, mantendo o título e o botão de reabrir.
+- **Navegação** (esquerda): recolhe a sidebar inteira para uma faixa fina, liberando espaço para o conteúdo.
+
+Cada estado fica em `localStorage` (`pms.sidebar.toc.collapsed` e `pms.sidebar.nav.collapsed`), então um não interfere no outro e a preferência sobrevive à navegação. No mobile os botões ficam ocultos: o índice usa o popover nativo e a navegação usa o drawer.
 
 ---
 
