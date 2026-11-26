@@ -153,6 +153,7 @@ study-material/
 │   ├── 16-simulado.md         # 30 MCQ, cálculos, abertas, exercício
 │   ├── 17-glossario-cheatsheet.md
 │   ├── 18-lacunas-e-evolucao.md # o que não existe, benefício, por quê, adoção
+│   ├── 19-respostas.md        # respostas de quizzes, cálculos, ordens e flashcards
 │   ├── javascripts/study.js   # widgets (quiz, ordem, cálculo, flash, progresso)
 │   ├── stylesheets/extra.css  # estilos dos widgets + diagramas claro/escuro
 │   └── assets/

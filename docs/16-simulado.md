@@ -452,4 +452,4 @@ Desenhe e justifique:
 <label class="study-check"><input type="checkbox" data-key="sim-5"> Sei dizer três lacunas e o próximo passo de cada uma.</label>
 
 !!! info "Continue"
-    [Glossário e cheatsheet](17-glossario-cheatsheet.md) para a revisão de véspera.
+    [Glossário e cheatsheet](17-glossario-cheatsheet.md) para a revisão de véspera. O gabarito completo está em [Respostas](19-respostas.md).

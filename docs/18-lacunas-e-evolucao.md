@@ -517,4 +517,4 @@ Exemplos:
 <label class="study-check"><input type="checkbox" data-key="g-talk"> Uso o template “não temos X; ganho Y; por Z; primeiro passo W; métrica M”.</label>
 
 !!! info "Volte ao começo"
-    Para revisar a teoria de cada lacuna, use o [mapa da matéria](00-mapa.md). Para treinar a defesa oral, o [estudo de caso](15-estudo-de-caso.md).
+    Para revisar a teoria de cada lacuna, use o [mapa da matéria](00-mapa.md). Para treinar a defesa oral, o [estudo de caso](15-estudo-de-caso.md). As respostas dos quizzes e exercícios estão em [Respostas](19-respostas.md).

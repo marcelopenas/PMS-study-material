@@ -339,6 +339,7 @@ Clique (ou use Enter/Espaço) para virar.
 | Defesa oral | [15](15-estudo-de-caso.md) |
 | Questões | [16](16-simulado.md) |
 | Lacunas e evolução | [18](18-lacunas-e-evolucao.md) |
+| Respostas | [19](19-respostas.md) |
 
 !!! quote "Em resumo"
     Se você só puder levar uma ideia: **arquitetura é o conjunto de decisões caras de desfazer — e o que importa é saber por que você as tomou, quanto custaram e como mediu o resultado.**

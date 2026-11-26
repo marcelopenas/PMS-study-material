@@ -33,6 +33,7 @@ nav = [
   { "16. Simulado e banco de questões" = "16-simulado.md" },
   { "17. Glossário e cheatsheet" = "17-glossario-cheatsheet.md" },
   { "18. O que não foi implementado" = "18-lacunas-e-evolucao.md" },
+  { "19. Respostas" = "19-respostas.md" },
 ]
 
 [project.extra]

@@ -189,6 +189,7 @@ Marque o que você já consegue explicar **sem olhar**. O progresso fica salvo n
 - **Vai defender o projeto?** Vá direto ao [estudo de caso](15-estudo-de-caso.md) e ao [simulado](16-simulado.md).
 - **Precisa revisar números?** O [cheatsheet](17-glossario-cheatsheet.md) tem fórmulas, comandos e a tabela de custos.
 - **Vai justificar o que falta?** [O que não foi implementado](18-lacunas-e-evolucao.md) explica cada ausência com benefício, motivo, custo e caminho de adoção.
+- **Já respondeu e quer conferir?** [Respostas](19-respostas.md) reúne quizzes, cálculos, ordenações, flashcards e as abertas do simulado.
 
 </div>
 
